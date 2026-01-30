@@ -9,3 +9,4 @@ Route::get('/', function () {
 })->middleware(['auth', 'verified'])->name('home');
 
 require __DIR__ . '/settings.php';
+require __DIR__ . '/user.php';
