@@ -24,4 +24,19 @@ class UserTest extends TestCase
                 ->has('users')
         );
     }
+
+    public function test_admin_can_access_user_create_screen()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('users.create'))
+            ->assertStatus(200)
+            ->assertInertia(
+                fn($page) =>
+                $page->component('Users/Create')
+            );
+    }
 }
