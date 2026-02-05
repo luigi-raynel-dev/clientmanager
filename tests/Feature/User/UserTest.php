@@ -12,8 +12,11 @@ class UserTest extends TestCase
 
     public function test_it_lists_users()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $this->actingAs($admin);
 
         $response = $this->get(route('users.index'));
 
@@ -38,5 +41,14 @@ class UserTest extends TestCase
                 fn($page) =>
                 $page->component('Users/Create')
             );
+    }
+
+    public function test_user_cannot_access_user_create_screen()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('users.create'))
+            ->assertForbidden();
     }
 }

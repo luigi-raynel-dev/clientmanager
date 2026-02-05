@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-// import { users } from '@/routes';
+import { index, create } from '@/routes/users';
 import { type BreadcrumbItem } from '@/types';
 
 interface User {
@@ -11,14 +11,14 @@ interface User {
   created_at: string
 }
 
-defineProps<{
+const props = defineProps<{
   users: User[]
 }>()
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Users',
-    href: "users().url",
+    href: index().url,
   },
 ];
 </script>
@@ -29,6 +29,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+      <div class="flex justify-end items-center">
+        <Link :href="create().url">
+          <Button class="bg-primary text-primary-foreground mb-4 cursor-pointer p-2 rounded-sm" variant="secondary">
+            Criar usuário
+          </Button>
+        </Link>
+      </div>
       <table class="table-auto w-full border">
         <thead>
           <tr>
