@@ -3,6 +3,7 @@ import { Head, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create } from '@/routes/users';
 import { type BreadcrumbItem } from '@/types';
+import { Button, Column, DataTable } from 'primevue';
 
 interface User {
   id: number
@@ -36,27 +37,18 @@ const breadcrumbs: BreadcrumbItem[] = [
           </Button>
         </Link>
       </div>
-      <table class="table-auto w-full border">
-        <thead>
-          <tr>
-            <th class="p-2 text-left">ID</th>
-            <th class="p-2 text-left">Nome</th>
-            <th class="p-2 text-left">Email</th>
-            <th class="p-2 text-left">Criado em</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr v-for="user in users" :key="user.id" class="border-t">
-            <td class="p-2">{{ user.id }}</td>
-            <td class="p-2">{{ user.name }}</td>
-            <td class="p-2">{{ user.email }}</td>
-            <td class="p-2">
-              {{ new Date(user.created_at).toLocaleDateString() }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="card">
+        <DataTable :value="users" tableStyle="min-width: 50rem">
+          <Column field="id" header="ID"></Column>
+          <Column field="name" header="Nome"></Column>
+          <Column field="email" header="Email"></Column>
+          <Column header="Created At">
+            <template #body="{ data }">
+              {{ new Date(data.created_at).toLocaleDateString() }}
+            </template>
+          </Column>
+        </DataTable>
+      </div>
     </div>
   </AppLayout>
 </template>
