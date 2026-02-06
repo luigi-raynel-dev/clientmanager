@@ -12,4 +12,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
         return Inertia::render('Users/Create');
     })
         ->name('users.create');
+
+    Route::post('/users', [UserController::class, 'store'])
+        ->name('users.store');
 });

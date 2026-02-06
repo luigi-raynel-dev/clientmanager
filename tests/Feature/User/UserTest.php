@@ -51,4 +51,66 @@ class UserTest extends TestCase
             ->get(route('users.create'))
             ->assertForbidden();
     }
+
+    public function test_admin_can_create_a_user()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $data = [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'role' => fake()->randomElement(['admin', 'user']),
+            'password' => 'Password123#',
+            'password_confirmation' => 'Password123#',
+        ];
+
+        $this
+            ->actingAs($admin)
+            ->post('/users', $data)
+            ->assertRedirect('/users');
+
+        $this->assertDatabaseHas('users', [
+            'email' => $data['email'],
+        ]);
+    }
+
+    public function test_user_cannot_create_a_user()
+    {
+        $user = User::factory()->create();
+
+        $data = [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'role' => fake()->randomElement(['admin', 'user']),
+            'password' => 'Password123#',
+            'password_confirmation' => 'Password123#',
+        ];
+
+        $this
+            ->actingAs($user)
+            ->post('/users', $data)
+            ->assertForbidden();
+    }
+
+    public function test_password_confirmation_does_not_math()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $data = [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+            'role' => fake()->randomElement(['admin', 'user']),
+            'password' => 'Password123#',
+            'password_confirmation' => 'Password123#Wrong',
+        ];
+
+        $this
+            ->actingAs($admin)
+            ->post('/users', $data)
+            ->assertFound('/users');
+    }
 }
