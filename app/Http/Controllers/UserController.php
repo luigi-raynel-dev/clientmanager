@@ -24,6 +24,8 @@ class UserController extends Controller
     ) {
         $action->execute($request->validated());
 
-        return redirect()->route('users.index');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User created successfully');;
     }
 }

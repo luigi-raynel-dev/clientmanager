@@ -5,7 +5,7 @@ import { index, create } from '@/routes/users';
 import { type BreadcrumbItem } from '@/types';
 import { Button, Column, DataTable } from 'primevue';
 
-interface User {
+export interface User {
   id: number
   name: string
   email: string
@@ -34,7 +34,7 @@ const breadcrumbs: BreadcrumbItem[] = [
       <div class="flex justify-end items-center">
         <Link :href="create().url">
           <Button class="bg-primary text-primary-foreground mb-4 cursor-pointer p-2 rounded-sm" variant="secondary">
-            Criar usuário
+            Create User
           </Button>
         </Link>
       </div>
