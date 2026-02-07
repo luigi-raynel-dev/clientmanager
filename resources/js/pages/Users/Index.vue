@@ -10,6 +10,7 @@ interface User {
   name: string
   email: string
   created_at: string
+  role: 'admin' | 'user'
 }
 
 const props = defineProps<{
@@ -42,6 +43,7 @@ const breadcrumbs: BreadcrumbItem[] = [
           <Column field="id" header="ID"></Column>
           <Column field="name" header="Nome"></Column>
           <Column field="email" header="Email"></Column>
+          <Column field="role" header="Role"></Column>
           <Column header="Created At">
             <template #body="{ data }">
               {{ new Date(data.created_at).toLocaleDateString() }}
