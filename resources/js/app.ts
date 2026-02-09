@@ -3,10 +3,11 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import PrimeVue from 'primevue/config';
-import Aura from '@primeuix/themes/aura';
-import '../css/app.css';
 import { initializeTheme } from './composables/useAppearance';
 import ToastService from 'primevue/toastservice';
+import Aura from '@primeuix/themes/aura';
+import 'primeicons/primeicons.css';
+import '../css/app.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
