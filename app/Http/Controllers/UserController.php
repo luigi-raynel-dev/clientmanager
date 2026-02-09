@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Users\CreateUser;
+use App\Actions\Users\ListUsers;
+use App\DTO\User\UserFilter;
 use App\Http\Requests\User\StoreUserRequest;
-use App\Models\User;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(ListUsers $useCase)
     {
+        $filter = new UserFilter(request('q'));
+
+        $users = $useCase->execute($filter);
+
         return Inertia::render('Users/Index', [
-            'users' => User::select('id', 'name', 'email', 'created_at', 'role')
-                ->orderBy('created_at', 'desc')
-                ->get()
+            ...compact('users'),
+            'filters' => request()->only('q'),
         ]);
     }
 

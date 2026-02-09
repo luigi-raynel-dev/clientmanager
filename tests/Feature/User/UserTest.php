@@ -28,6 +28,27 @@ class UserTest extends TestCase
         );
     }
 
+    public function test_it_search_users()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+        $user = User::factory()->create();
+
+        $this->actingAs($admin);
+
+        $response = $this->get(route('users.index', [
+            'q' => $user->email,
+        ]));
+
+        $response->assertInertia(
+            fn($page) => $page
+                ->component('Users/Index')
+                ->has('users', 1)
+                ->where('users.0.email', $user->email)
+        );
+    }
+
     public function test_admin_can_access_user_create_screen()
     {
         $admin = User::factory()->create([

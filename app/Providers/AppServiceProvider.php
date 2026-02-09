@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domain\Users\Repositories\UserRepository;
+use App\Infrastructure\Persistence\Eloquent\EloquentUserRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +18,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(
+            UserRepository::class,
+            EloquentUserRepository::class
+        );
     }
 
     /**
@@ -36,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
 
     protected function configureDefaults(): void
     {
+
         Date::use(CarbonImmutable::class);
 
         DB::prohibitDestructiveCommands(
