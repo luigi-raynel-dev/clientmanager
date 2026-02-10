@@ -3,37 +3,48 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create } from '@/routes/users';
 import { type BreadcrumbItem } from '@/types';
-import { Button, Column, DataTable, IconField, InputIcon, InputText } from 'primevue';
+import { Button, Column, DataTable, Drawer, IconField, InputIcon, InputText, SelectButton } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
+
+export type UserRoleType = 'admin' | 'user'
 
 export interface User {
   id: number
   name: string
   email: string
   created_at: string
-  role: 'admin' | 'user'
+  role: UserRoleType
+}
+
+export type UsersFilterProps = {
+  q?: string
+  role?: UserRoleType
 }
 
 const props = defineProps<{
   users: User[],
-  filters?: {
-    q?: string
-  }
+  filters?: UsersFilterProps
 }>()
 
+const getUsers = (filters: UsersFilterProps) => {
+  router.get(index().url, { ...filters }, {
+    preserveState: true,
+    replace: true,
+  })
+}
+
 const search = ref(props.filters?.q ?? '')
+const form = ref({
+  role: props.filters?.role
+})
 
 watch(
   search,
-  debounce((value) => {
-    router.get(index().url, { q: value }, {
-      preserveState: true,
-      replace: true,
-    })
-  }, 400)
+  debounce((q) => getUsers({ ...form.value, q }), 400)
 )
 
+const visible = ref(false);
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -50,17 +61,41 @@ const breadcrumbs: BreadcrumbItem[] = [
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
       <div class="flex justify-between items-center">
-
-        <IconField>
-          <InputIcon class="pi pi-search" />
-          <InputText v-model="search" placeholder="Search users..." class="w-64" />
-        </IconField>
-        <Link :href="create().url">
-          <Button class="bg-primary text-primary-foreground mb-4 cursor-pointer p-2 rounded-sm" variant="secondary">
+        <div class="flex items-center gap-4">
+          <IconField>
+            <InputIcon class="pi pi-search" />
+            <InputText v-model="search" placeholder="Search users..." class="w-64" />
+          </IconField>
+          <Button severity="secondary" icon="pi pi-filter" @click="visible = true" />
+        </div>
+        <Link :href="create().url" class="flex items-center">
+          <Button class="bg-primary text-primary-foreground cursor-pointer p-2 rounded-sm" variant="secondary">
             Create User
           </Button>
         </Link>
       </div>
+      <Drawer v-model:visible="visible">
+        <template #header>
+          <h2 class="text-lg font-semibold">Filter users</h2>
+        </template>
+        <div class="flex flex-col gap-1">
+          <label>Role</label>
+          <div class="card flex justify-center">
+            <SelectButton fluid v-model="form.role" :options="[
+              { label: 'Admin', value: 'admin' },
+              { label: 'User', value: 'user' },
+            ]" optionLabel="label" optionValue="value" />
+          </div>
+        </div>
+        <template #footer>
+          <div class="flex items-center gap-2">
+            <Button label="Apply" class="flex-auto" variant="outlined" @click="() => {
+              getUsers({ ...form, q: search })
+              visible = false
+            }" />
+          </div>
+        </template>
+      </Drawer>
       <div class="card">
         <DataTable stripedRows :value="users" filterDisplay="menu" tableStyle="min-width: 50rem">
           <Column field="id" header="ID"></Column>

@@ -18,6 +18,11 @@ class EloquentUserRepository implements UserRepository
         $q->where('name', 'like', "%{$search}%")
           ->orWhere('email', 'like', "%{$search}%")
       )
+      ->when(
+        $filter->role,
+        fn($q, $role) =>
+        $q->where('role', $role)
+      )
       ->orderByDesc('created_at')
       ->get();
   }

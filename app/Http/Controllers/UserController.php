@@ -12,13 +12,13 @@ class UserController extends Controller
 {
     public function index(ListUsers $useCase)
     {
-        $filter = new UserFilter(request('q'));
+        $filter = new UserFilter(request('q'), request('role'));
 
         $users = $useCase->execute($filter);
 
         return Inertia::render('Users/Index', [
             ...compact('users'),
-            'filters' => request()->only('q'),
+            'filters' => request()->only(['q', 'role']),
         ]);
     }
 
