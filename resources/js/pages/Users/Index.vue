@@ -3,7 +3,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create } from '@/routes/users';
 import { type BreadcrumbItem } from '@/types';
-import { Button, Column, DataTable, Drawer, IconField, InputIcon, InputText, SelectButton } from 'primevue';
+import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, SelectButton } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 
@@ -20,6 +20,8 @@ export interface User {
 export type UsersFilterProps = {
   q?: string
   role?: UserRoleType
+  order_by?: string
+  order_direction?: 'asc' | 'desc'
 }
 
 const props = defineProps<{
@@ -32,6 +34,13 @@ const getUsers = (filters: UsersFilterProps) => {
     preserveState: true,
     replace: true,
   })
+}
+
+const onSort = (event: DataTableSortEvent) => {
+  const order_by = event.sortField
+  if (typeof order_by !== 'string') return
+  const order_direction = event.sortOrder === 1 ? 'asc' : 'desc'
+  getUsers({ ...form.value, q: search.value, order_by, order_direction })
 }
 
 const search = ref(props.filters?.q ?? '')
@@ -97,12 +106,12 @@ const breadcrumbs: BreadcrumbItem[] = [
         </template>
       </Drawer>
       <div class="card">
-        <DataTable stripedRows :value="users" filterDisplay="menu" tableStyle="min-width: 50rem">
-          <Column field="id" header="ID"></Column>
-          <Column field="name" header="Nome"></Column>
-          <Column field="email" header="Email"></Column>
-          <Column field="role" header="Role"></Column>
-          <Column header="Created At">
+        <DataTable stripedRows :value="users" filterDisplay="menu" lazy @sort="onSort" tableStyle="min-width: 50rem">
+          <Column sortable field="id" header="ID"></Column>
+          <Column sortable field="name" header="Nome"></Column>
+          <Column sortable field="email" header="Email"></Column>
+          <Column sortable field="role" header="Role"></Column>
+          <Column sortable field="created_at" header="Created At">
             <template #body="{ data }">
               {{ new Date(data.created_at).toLocaleDateString() }}
             </template>

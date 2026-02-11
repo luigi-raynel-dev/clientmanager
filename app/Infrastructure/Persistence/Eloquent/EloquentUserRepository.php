@@ -23,7 +23,7 @@ class EloquentUserRepository implements UserRepository
         fn($q, $role) =>
         $q->where('role', $role)
       )
-      ->orderByDesc('created_at')
+      ->orderBy($filter->order_by ?? 'created_at', $filter->order_direction ?? 'desc')
       ->get();
   }
 }
