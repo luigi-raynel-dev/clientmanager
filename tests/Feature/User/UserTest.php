@@ -44,8 +44,8 @@ class UserTest extends TestCase
         $response->assertInertia(
             fn($page) => $page
                 ->component('Users/Index')
-                ->has('users', 1)
-                ->where('users.0.email', $user->email)
+                ->has('users.data', 1)
+                ->where('users.data.0.email', $user->email)
         );
     }
 

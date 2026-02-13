@@ -12,20 +12,20 @@ class UserController extends Controller
 {
     public function index(ListUsers $useCase)
     {
-        $params = request()->only(['q', 'role', 'order_by', 'order_direction']);
-
         $filter = new UserFilter(
-            search: $params['q'] ?? null,
-            role: $params['role'] ?? null,
-            order_by: $params['order_by'] ?? null,
-            order_direction: $params['order_direction'] ?? null,
+            search: request('q'),
+            role: request('role'),
+            order_by: request('order_by'),
+            order_direction: request('order_direction'),
+            per_page: request('per_page'),
+            page: request('page'),
         );
 
         $users = $useCase->execute($filter);
 
         return Inertia::render('Users/Index', [
             ...compact('users'),
-            'filters' => $params,
+            'filters' => request()->only(['q', 'role', 'order_by', 'order_direction']),
         ]);
     }
 

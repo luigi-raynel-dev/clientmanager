@@ -2,7 +2,7 @@
 import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create } from '@/routes/users';
-import { type BreadcrumbItem } from '@/types';
+import { DataPaginator, type BreadcrumbItem } from '@/types';
 import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, SelectButton } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
@@ -22,10 +22,12 @@ export type UsersFilterProps = {
   role?: UserRoleType
   order_by?: string
   order_direction?: 'asc' | 'desc'
+  per_page?: number
+  page?: number
 }
 
 const props = defineProps<{
-  users: User[],
+  users: DataPaginator<User[]>,
   filters?: UsersFilterProps
 }>()
 
@@ -43,6 +45,18 @@ const onSort = (event: DataTableSortEvent) => {
   getUsers({ ...form.value, q: search.value, order_by, order_direction })
 }
 
+const onPage = (event: any) => {
+  const page = event.page + 1 // PrimeVue começa em 0, Laravel em 1
+  const per_page = event.rows
+
+  getUsers({
+    ...form.value,
+    q: search.value,
+    page,
+    per_page
+  })
+}
+
 const search = ref(props.filters?.q ?? '')
 const form = ref({
   role: props.filters?.role
@@ -50,7 +64,7 @@ const form = ref({
 
 watch(
   search,
-  debounce((q) => getUsers({ ...form.value, q }), 400)
+  debounce((q) => getUsers({ ...form.value, q, page: 1 }), 400)
 )
 
 const visible = ref(false);
@@ -106,7 +120,9 @@ const breadcrumbs: BreadcrumbItem[] = [
         </template>
       </Drawer>
       <div class="card">
-        <DataTable stripedRows :value="users" filterDisplay="menu" lazy @sort="onSort" tableStyle="min-width: 50rem">
+        <DataTable stripedRows :paginator="true" :rows="users.per_page" :totalRecords="users.total" :value="users.data"
+          :rowsPerPageOptions="[5, 10, 25, 50]" filterDisplay="menu" lazy @sort="onSort" @page="onPage" scrollable
+          scrollHeight="70vh">
           <Column sortable field="id" header="ID"></Column>
           <Column sortable field="name" header="Nome"></Column>
           <Column sortable field="email" header="Email"></Column>
