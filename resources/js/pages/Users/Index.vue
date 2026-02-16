@@ -31,6 +31,11 @@ const props = defineProps<{
   filters?: UsersFilterProps
 }>()
 
+const first = ref(0)
+watch(() => props.users.current_page, (page) => {
+  first.value = ((Number(page) || 1) - 1) * props.users.per_page
+})
+
 const getUsers = (filters: UsersFilterProps) => {
   router.get(index().url, { ...filters }, {
     preserveState: true,
@@ -47,7 +52,7 @@ const onSort = (event: DataTableSortEvent) => {
   const order_by = event.sortField
   if (typeof order_by !== 'string') return
   const order_direction = event.sortOrder === 1 ? 'asc' : 'desc'
-  getUsers({ ...props.filters, ...form.value, q: search.value, order_by, order_direction })
+  getUsers({ ...props.filters, ...form.value, q: search.value, order_by, order_direction, page: 1 })
 }
 
 const onPage = (event: any) => {
@@ -113,17 +118,22 @@ const breadcrumbs: BreadcrumbItem[] = [
         </div>
         <template #footer>
           <div class="flex items-center gap-2">
+            <Button severity="secondary" icon="pi pi-filter-slash" @click="() => {
+              form.role = undefined
+              getUsers({ ...props.filters, ...form, q: search, page: 1 })
+              visible = false
+            }" />
             <Button label="Apply" class="flex-auto" variant="outlined" @click="() => {
-              getUsers({ ...props.filters, ...form, q: search })
+              getUsers({ ...props.filters, ...form, q: search, page: 1 })
               visible = false
             }" />
           </div>
         </template>
       </Drawer>
       <div class="card">
-        <DataTable stripedRows :paginator="true" :rows="users.per_page" :totalRecords="users.total" :value="users.data"
-          :rowsPerPageOptions="[5, 10, 25, 50]" filterDisplay="menu" lazy @sort="onSort" @page="onPage" scrollable
-          scrollHeight="70vh">
+        <DataTable stripedRows paginator :rows="users.per_page" :totalRecords="users.total" :value="users.data"
+          :rowsPerPageOptions="[5, 10, 25, 50]" filterDisplay="menu" lazy @sort="onSort" @page="onPage" :first="first"
+          scrollable scrollHeight="70vh">
           <Column sortable field="id" header="ID"></Column>
           <Column sortable field="name" header="Nome"></Column>
           <Column sortable field="email" header="Email"></Column>
@@ -133,7 +143,7 @@ const breadcrumbs: BreadcrumbItem[] = [
               {{ new Date(data.created_at).toLocaleDateString() }}
             </template>
           </Column>
-          <template #footer> In total there are {{ users.total }} records. </template>
+          <template #footer> In total there are {{ users.total }} records. {{ first }}</template>
         </DataTable>
       </div>
     </div>
