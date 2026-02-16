@@ -38,18 +38,24 @@ const getUsers = (filters: UsersFilterProps) => {
   })
 }
 
+const search = ref(props.filters?.q ?? '')
+const form = ref({
+  role: props.filters?.role
+})
+
 const onSort = (event: DataTableSortEvent) => {
   const order_by = event.sortField
   if (typeof order_by !== 'string') return
   const order_direction = event.sortOrder === 1 ? 'asc' : 'desc'
-  getUsers({ ...form.value, q: search.value, order_by, order_direction })
+  getUsers({ ...props.filters, ...form.value, q: search.value, order_by, order_direction })
 }
 
 const onPage = (event: any) => {
-  const page = event.page + 1 // PrimeVue começa em 0, Laravel em 1
+  const page = event.page + 1
   const per_page = event.rows
 
   getUsers({
+    ...props.filters,
     ...form.value,
     q: search.value,
     page,
@@ -57,14 +63,9 @@ const onPage = (event: any) => {
   })
 }
 
-const search = ref(props.filters?.q ?? '')
-const form = ref({
-  role: props.filters?.role
-})
-
 watch(
   search,
-  debounce((q) => getUsers({ ...form.value, q, page: 1 }), 400)
+  debounce((q) => getUsers({ ...props.filters, ...form.value, q, page: 1 }), 400)
 )
 
 const visible = ref(false);
@@ -113,7 +114,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         <template #footer>
           <div class="flex items-center gap-2">
             <Button label="Apply" class="flex-auto" variant="outlined" @click="() => {
-              getUsers({ ...form, q: search })
+              getUsers({ ...props.filters, ...form, q: search })
               visible = false
             }" />
           </div>
@@ -132,6 +133,7 @@ const breadcrumbs: BreadcrumbItem[] = [
               {{ new Date(data.created_at).toLocaleDateString() }}
             </template>
           </Column>
+          <template #footer> In total there are {{ users.total }} records. </template>
         </DataTable>
       </div>
     </div>
