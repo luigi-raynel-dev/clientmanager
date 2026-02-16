@@ -3,7 +3,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create } from '@/routes/users';
 import { DataPaginator, type BreadcrumbItem } from '@/types';
-import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, SelectButton } from 'primevue';
+import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, OverlayBadge, SelectButton } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 
@@ -95,12 +95,13 @@ const breadcrumbs: BreadcrumbItem[] = [
             <InputIcon class="pi pi-search" />
             <InputText v-model="search" placeholder="Search users..." class="w-64" />
           </IconField>
-          <Button severity="secondary" icon="pi pi-filter" @click="visible = true" />
+          <OverlayBadge v-if="form.role !== undefined" :value="form.role !== undefined ? 1 : 0">
+            <Button severity="secondary" icon="pi pi-filter" @click="visible = true" />
+          </OverlayBadge>
+          <Button v-else severity="secondary" icon="pi pi-filter" @click="visible = true" />
         </div>
         <Link :href="create().url" class="flex items-center">
-          <Button class="bg-primary text-primary-foreground cursor-pointer p-2 rounded-sm" variant="secondary">
-            Create User
-          </Button>
+          <Button label="Create User" icon="pi pi-user-plus" />
         </Link>
       </div>
       <Drawer v-model:visible="visible">
@@ -143,7 +144,7 @@ const breadcrumbs: BreadcrumbItem[] = [
               {{ new Date(data.created_at).toLocaleDateString() }}
             </template>
           </Column>
-          <template #footer> In total there are {{ users.total }} records. {{ first }}</template>
+          <template #footer> In total there are {{ users.total }} records.</template>
         </DataTable>
       </div>
     </div>
