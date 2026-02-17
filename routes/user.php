@@ -15,4 +15,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     Route::post('/users', [UserController::class, 'store'])
         ->name('users.store');
+
+    Route::put('/users/{id}', [UserController::class, 'update'])
+        ->name('users.update');
 });

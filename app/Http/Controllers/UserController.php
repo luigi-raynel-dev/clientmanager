@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Users\CreateUser;
+use App\Actions\Users\EditUser;
 use App\Actions\Users\ListUsers;
+use App\DTO\User\UserData;
 use App\DTO\User\UserFilter;
 use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -33,10 +36,39 @@ class UserController extends Controller
         StoreUserRequest $request,
         CreateUser $action
     ) {
-        $action->execute($request->validated());
+        $data = $request->validated();
+
+        $userData = new UserData(
+            name: $data['name'],
+            email: $data['email'],
+            password: $data['password'],
+            role: $data['role'],
+        );
+
+        $action->execute($userData);
 
         return redirect()
             ->route('users.index')
             ->with('success', 'User created successfully');;
+    }
+
+    public function update(
+        int $id,
+        UpdateUserRequest $request,
+        EditUser $action
+    ) {
+        $data = $request->validated();
+
+        $userData = new UserData(
+            name: $data['name'],
+            email: $data['email'],
+            role: $data['role'],
+        );
+
+        $action->execute($id, $userData);
+
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User updated successfully');;
     }
 }

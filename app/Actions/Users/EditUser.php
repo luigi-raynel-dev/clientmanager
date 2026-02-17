@@ -6,12 +6,12 @@ use App\Domain\Users\Repositories\UserRepository;
 use App\DTO\User\UserData;
 use App\Models\User;
 
-class CreateUser
+class EditUser
 {
     public function __construct(private UserRepository $repository) {}
 
-    public function execute(UserData $data): User
+    public function execute(int $id, UserData $data): User
     {
-        return $this->repository->create($data);
+        return $this->repository->edit($id, $data);
     }
 }

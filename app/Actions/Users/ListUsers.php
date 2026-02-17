@@ -4,7 +4,6 @@ namespace App\Actions\Users;
 
 use App\Domain\Users\Repositories\UserRepository;
 use App\DTO\User\UserFilter;
-use App\Models\User;
 
 class ListUsers
 {

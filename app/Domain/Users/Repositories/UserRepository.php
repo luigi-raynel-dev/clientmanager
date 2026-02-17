@@ -2,11 +2,16 @@
 
 namespace App\Domain\Users\Repositories;
 
+use App\DTO\User\UserData;
 use App\DTO\User\UserFilter;
-// use Illuminate\Support\Collection;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface UserRepository
 {
   public function search(UserFilter $filter): LengthAwarePaginator;
+
+  public function create(UserData $data): User;
+
+  public function edit(int $id, UserData $data): User;
 }
