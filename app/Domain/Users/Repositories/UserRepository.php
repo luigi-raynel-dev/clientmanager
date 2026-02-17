@@ -11,6 +11,8 @@ interface UserRepository
 {
   public function search(UserFilter $filter): LengthAwarePaginator;
 
+  public function get(int $id): User;
+
   public function create(UserData $data): User;
 
   public function edit(int $id, UserData $data): User;

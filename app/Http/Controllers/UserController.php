@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Users\CreateUser;
 use App\Actions\Users\EditUser;
+use App\Actions\Users\GetUser;
 use App\Actions\Users\ListUsers;
 use App\DTO\User\UserData;
 use App\DTO\User\UserFilter;
@@ -13,7 +14,7 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index(ListUsers $useCase)
+    public function index(ListUsers $action)
     {
         $filter = new UserFilter(
             search: request('q'),
@@ -24,13 +25,23 @@ class UserController extends Controller
             page: request('page'),
         );
 
-        $users = $useCase->execute($filter);
+        $users = $action->execute($filter);
 
         return Inertia::render('Users/Index', [
             ...compact('users'),
             'filters' => request()->only(['q', 'role', 'order_by', 'order_direction']),
         ]);
     }
+
+    public function edit(int $id, GetUser $action)
+    {
+        $user = $action->execute($id);
+
+        return Inertia::render('Users/Edit', [
+            'user' => $user,
+        ]);
+    }
+
 
     public function store(
         StoreUserRequest $request,

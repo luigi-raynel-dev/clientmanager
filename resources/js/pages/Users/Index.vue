@@ -1,21 +1,13 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { index, create } from '@/routes/users';
-import { DataPaginator, type BreadcrumbItem } from '@/types';
+import { index, create, edit } from '@/routes/users';
+import { DataPaginator, User, type BreadcrumbItem } from '@/types';
 import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, OverlayBadge, SelectButton } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 
 export type UserRoleType = 'admin' | 'user'
-
-export interface User {
-  id: number
-  name: string
-  email: string
-  created_at: string
-  role: UserRoleType
-}
 
 export type UsersFilterProps = {
   q?: string
@@ -146,7 +138,7 @@ const breadcrumbs: BreadcrumbItem[] = [
           </Column>
           <Column style="flex: 0 0 4rem" header="Actions">
             <template #body="{ data }">
-              <Link :href="`/users/${data.id}`" class="flex items-center">
+              <Link :href="edit(data.id).url" class="flex items-center">
                 <Button type="button" severity="secondary" variant="outlined" icon="pi pi-pencil" text size="small" />
               </Link>
             </template>
