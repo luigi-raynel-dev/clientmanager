@@ -144,6 +144,13 @@ const breadcrumbs: BreadcrumbItem[] = [
               {{ new Date(data.created_at).toLocaleDateString() }}
             </template>
           </Column>
+          <Column style="flex: 0 0 4rem" header="Actions">
+            <template #body="{ data }">
+              <Link :href="`/users/${data.id}`" class="flex items-center">
+                <Button type="button" severity="secondary" variant="outlined" icon="pi pi-pencil" text size="small" />
+              </Link>
+            </template>
+          </Column>
           <template #footer> In total there are {{ users.total }} records.</template>
         </DataTable>
       </div>
