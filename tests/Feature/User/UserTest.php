@@ -134,4 +134,28 @@ class UserTest extends TestCase
             ->post('/users', $data)
             ->assertFound('/users');
     }
+
+    public function test_admin_can_edit_a_user()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($admin)
+            ->put("/users/{$user->id}", [
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => 'admin',
+            ])
+
+            ->assertRedirect("/users");
+
+        $this->assertDatabaseHas('users', [
+            'email' => $user->email,
+            'role' => 'admin',
+        ]);
+    }
 }
