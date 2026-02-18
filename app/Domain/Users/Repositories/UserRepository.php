@@ -16,4 +16,6 @@ interface UserRepository
   public function create(UserData $data): User;
 
   public function edit(int $id, UserData $data): User;
+
+  public function delete(int $id): bool;
 }

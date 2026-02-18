@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { index, create, edit } from '@/routes/users';
+import { index, create, edit, destroy } from '@/routes/users';
 import { DataPaginator, User, type BreadcrumbItem } from '@/types';
 import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, OverlayBadge, SelectButton, useConfirm, useToast } from 'primevue';
 import debounce from 'lodash.debounce'
@@ -93,7 +93,24 @@ const confirmDeletion = (user: User) => {
       severity: 'danger'
     },
     accept: () => {
-      toast.add({ severity: 'success', summary: 'Confirmed', detail: user.id + ' Record deleted', life: 3000 });
+      router.delete(destroy(user.id).url, {
+        onSuccess: () => {
+          toast.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'User deleted successfully',
+            life: 3000,
+          })
+        },
+        onError: () => {
+          toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to delete user',
+            life: 3000,
+          })
+        }
+      })
     }
   });
 };

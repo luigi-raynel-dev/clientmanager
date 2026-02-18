@@ -158,4 +158,22 @@ class UserTest extends TestCase
             'role' => 'admin',
         ]);
     }
+
+    public function test_admin_can_delete_a_user()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($admin)
+            ->delete("/users/{$user->id}")
+            ->assertRedirect("/users");
+
+        $this->assertDatabaseMissing('users', [
+            'email' => $user->email
+        ]);
+    }
 }

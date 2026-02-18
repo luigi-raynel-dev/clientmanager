@@ -6,6 +6,7 @@ use App\Actions\Users\CreateUser;
 use App\Actions\Users\EditUser;
 use App\Actions\Users\GetUser;
 use App\Actions\Users\ListUsers;
+use App\Actions\Users\DeleteUser;
 use App\DTO\User\UserData;
 use App\DTO\User\UserFilter;
 use App\Http\Requests\User\StoreUserRequest;
@@ -42,7 +43,6 @@ class UserController extends Controller
         ]);
     }
 
-
     public function store(
         StoreUserRequest $request,
         CreateUser $action
@@ -60,7 +60,7 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->with('success', 'User created successfully');;
+            ->with('success', 'User created successfully');
     }
 
     public function update(
@@ -80,6 +80,15 @@ class UserController extends Controller
 
         return redirect()
             ->route('users.index')
-            ->with('success', 'User updated successfully');;
+            ->with('success', 'User updated successfully');
+    }
+
+    public function destroy(
+        int $id,
+        DeleteUser $action
+    ) {
+        $action->execute($id);
+
+        return redirect()->route('users.index');
     }
 }
