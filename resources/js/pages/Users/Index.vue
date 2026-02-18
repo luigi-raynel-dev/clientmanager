@@ -80,8 +80,8 @@ const breadcrumbs: BreadcrumbItem[] = [
   <Head title="Users" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-      <div class="flex justify-between items-center">
+    <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
+      <div class="flex flex-row justify-between items-center">
         <div class="flex items-center gap-4">
           <IconField>
             <InputIcon class="pi pi-search" />
@@ -91,8 +91,11 @@ const breadcrumbs: BreadcrumbItem[] = [
             <Button severity="secondary" icon="pi pi-filter" @click="visible = true" />
           </OverlayBadge>
           <Button v-else severity="secondary" icon="pi pi-filter" @click="visible = true" />
+          <Link :href="create().url" class="flex sm:hidden items-center">
+            <Button icon="pi pi-user-plus" />
+          </Link>
         </div>
-        <Link :href="create().url" class="flex items-center">
+        <Link :href="create().url" class="hidden sm:flex items-center">
           <Button label="Create User" icon="pi pi-user-plus" />
         </Link>
       </div>
