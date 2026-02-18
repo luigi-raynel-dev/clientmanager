@@ -5,6 +5,7 @@ import { createApp, h } from 'vue';
 import PrimeVue from 'primevue/config';
 import { initializeTheme } from './composables/useAppearance';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 import Aura from '@primeuix/themes/aura';
 import 'primeicons/primeicons.css';
 import '../css/app.css';
@@ -31,6 +32,7 @@ createInertiaApp({
                     },
                 },
             })
+            .use(ConfirmationService)
             .use(ToastService)
             .mount(el);
     },

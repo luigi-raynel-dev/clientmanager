@@ -3,7 +3,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create, edit } from '@/routes/users';
 import { DataPaginator, User, type BreadcrumbItem } from '@/types';
-import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, OverlayBadge, SelectButton } from 'primevue';
+import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, OverlayBadge, SelectButton, useConfirm, useToast } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 
@@ -73,6 +73,32 @@ const breadcrumbs: BreadcrumbItem[] = [
     href: index().url,
   },
 ];
+
+const confirm = useConfirm();
+const toast = useToast();
+
+const confirmDeletion = (user: User) => {
+  confirm.require({
+    message: `Do you want to delete this user: #${user.id}?`,
+    header: 'Danger Zone',
+    icon: 'pi pi-info-circle',
+    rejectLabel: 'Cancel',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label: 'Delete',
+      severity: 'danger'
+    },
+    accept: () => {
+      toast.add({ severity: 'success', summary: 'Confirmed', detail: user.id + ' Record deleted', life: 3000 });
+    }
+  });
+};
+
+
 </script>
 
 <template>
@@ -82,10 +108,10 @@ const breadcrumbs: BreadcrumbItem[] = [
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
       <div class="flex flex-row justify-between items-center">
-        <div class="flex items-center gap-4">
-          <IconField>
+        <div class="w-full justify-between sm:w-auto flex items-center gap-4">
+          <IconField class="w-full sm:w-auto">
             <InputIcon class="pi pi-search" />
-            <InputText v-model="search" placeholder="Search users..." class="w-64" />
+            <InputText v-model="search" placeholder="Search users..." class="w-full sm:w-64" />
           </IconField>
           <OverlayBadge v-if="form.role !== undefined" :value="form.role !== undefined ? 1 : 0">
             <Button severity="secondary" icon="pi pi-filter" @click="visible = true" />
@@ -141,9 +167,13 @@ const breadcrumbs: BreadcrumbItem[] = [
           </Column>
           <Column style="flex: 0 0 4rem" header="Actions">
             <template #body="{ data }">
-              <Link :href="edit(data.id).url" class="flex items-center">
-                <Button type="button" severity="secondary" variant="outlined" icon="pi pi-pencil" text size="small" />
-              </Link>
+              <div class="flex items-center gap-2">
+                <Link :href="edit(data.id).url" class="flex items-center">
+                  <Button type="button" severity="secondary" variant="outlined" icon="pi pi-pencil" text size="small" />
+                </Link>
+                <Button type="button" severity="danger" variant="outlined" icon="pi pi-trash" text size="small"
+                  @click="() => confirmDeletion(data)" />
+              </div>
             </template>
           </Column>
           <template #footer> In total there are {{ users.total }} records.</template>

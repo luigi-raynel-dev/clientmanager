@@ -2,7 +2,7 @@
 import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { usePage } from '@inertiajs/vue3';
-import { Toast, useToast } from 'primevue';
+import { ConfirmDialog, Toast, useToast } from 'primevue';
 import { watch } from 'vue';
 
 type Props = {
@@ -35,6 +35,7 @@ watch(
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
         <Toast />
+        <ConfirmDialog />
         <slot />
     </AppLayout>
 </template>
