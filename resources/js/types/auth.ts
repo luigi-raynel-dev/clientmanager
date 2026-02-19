@@ -5,6 +5,7 @@ export type User = {
     name: string;
     email: string;
     role: UserRole;
+    is_blocked: boolean;
     avatar?: string;
     email_verified_at: string | null;
     created_at: string;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { index, create, edit, destroy } from '@/routes/users';
+import { index, create, edit, destroy, status } from '@/routes/users';
 import { DataPaginator, User, type BreadcrumbItem } from '@/types';
 import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, OverlayBadge, SelectButton, useConfirm, useToast } from 'primevue';
 import debounce from 'lodash.debounce'
@@ -115,6 +115,43 @@ const confirmDeletion = (user: User) => {
   });
 };
 
+const confirmStatusChange = (user: User) => {
+  confirm.require({
+    message: `Do you want to ${user.is_blocked ? 'unblock' : 'block'} this user: #${user.id}?`,
+    header: user.is_blocked ? 'Unblock User' : 'Block User',
+    icon: user.is_blocked ? 'pi pi-unlock' : 'pi pi-lock',
+    rejectLabel: 'Cancel',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label: user.is_blocked ? 'Unblock' : 'Block',
+      severity: user.is_blocked ? 'success' : 'danger'
+    },
+    accept: () => {
+      router.patch(status(user.id).url, { is_blocked: !user.is_blocked }, {
+        onSuccess: () => {
+          toast.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: `User ${user.is_blocked ? 'unblocked' : 'blocked'} successfully`,
+            life: 3000,
+          })
+        },
+        onError: () => {
+          toast.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to change user status',
+            life: 3000,
+          })
+        }
+      })
+    }
+  });
+};
 
 </script>
 
@@ -177,6 +214,14 @@ const confirmDeletion = (user: User) => {
           <Column sortable field="name" header="Nome"></Column>
           <Column sortable field="email" header="Email"></Column>
           <Column sortable field="role" header="Role"></Column>
+          <Column sortable field="is_blocked" header="Status">
+            <template #body="{ data }">
+              <Button v-tooltip="data.is_blocked ? 'Unblock User' : 'Block User'" type="button"
+                :severity="data.is_blocked ? 'danger' : 'success'" variant="outlined"
+                :icon="data.is_blocked ? 'pi pi-ban' : 'pi pi-check-circle'" text size="small"
+                @click="() => confirmStatusChange(data)" />
+            </template>
+          </Column>
           <Column sortable field="created_at" header="Created At">
             <template #body="{ data }">
               {{ new Date(data.created_at).toLocaleDateString() }}

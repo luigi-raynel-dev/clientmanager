@@ -13,7 +13,7 @@ class EloquentUserRepository implements UserRepository
 {
   public function search(UserFilter $filter): LengthAwarePaginator
   {
-    return User::select('id', 'name', 'email', 'created_at', 'role')
+    return User::select('id', 'name', 'email', 'created_at', 'role', 'is_blocked')
       ->when($filter->search, function ($q, $search) {
         $q->where(function ($q) use ($search) {
           $q->where('name', 'like', "%{$search}%")
@@ -24,6 +24,11 @@ class EloquentUserRepository implements UserRepository
         $filter->role,
         fn($q, $role) =>
         $q->where('role', $role)
+      )
+      ->when(
+        $filter->is_blocked,
+        fn($q, $isBlocked) =>
+        $q->where('is_blocked', $isBlocked)
       )
       ->orderBy($filter->order_by ?? 'created_at', $filter->order_direction ?? 'desc')
       ->paginate($filter->per_page ?? 10);
@@ -41,6 +46,7 @@ class EloquentUserRepository implements UserRepository
       'email' => $data->email,
       'password' => Hash::make($data->password),
       'role' => $data->role,
+      'is_blocked' => $data->is_blocked ?? false,
     ]);
   }
 
@@ -51,6 +57,7 @@ class EloquentUserRepository implements UserRepository
     $user->name = $data->name;
     $user->email = $data->email;
     $user->role = $data->role;
+    $user->is_blocked = $data->is_blocked ?? false;
 
     $user->save();
 

@@ -22,6 +22,7 @@ class UserController extends Controller
         $filter = new UserFilter(
             search: request('q'),
             role: request('role'),
+            is_blocked: request('is_blocked'),
             order_by: request('order_by'),
             order_direction: request('order_direction'),
             per_page: request('per_page'),
@@ -32,7 +33,7 @@ class UserController extends Controller
 
         return Inertia::render('Users/Index', [
             ...compact('users'),
-            'filters' => request()->only(['q', 'role', 'order_by', 'order_direction']),
+            'filters' => request()->only(['q', 'role', 'is_blocked', 'order_by', 'order_direction']),
         ]);
     }
 
@@ -56,6 +57,7 @@ class UserController extends Controller
             email: $data['email'],
             password: $data['password'],
             role: $data['role'],
+            is_blocked: $data['is_blocked'] ?? false,
         );
 
         $action->execute($userData);
@@ -76,6 +78,7 @@ class UserController extends Controller
             name: $data['name'],
             email: $data['email'],
             role: $data['role'],
+            is_blocked: $data['is_blocked'] ?? false,
         );
 
         $action->execute($id, $userData);
