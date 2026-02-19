@@ -62,4 +62,11 @@ class EloquentUserRepository implements UserRepository
     $user = User::findOrFail($id);
     return $user->delete();
   }
+
+  public function setIsBlocked(int $id, bool $isBlocked)
+  {
+    $user = User::findOrFail($id);
+    $user->is_blocked = $isBlocked;
+    $user->save();
+  }
 }

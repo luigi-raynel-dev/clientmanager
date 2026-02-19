@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Users\ChangeUserStatusAction;
 use App\Actions\Users\CreateUser;
 use App\Actions\Users\EditUser;
 use App\Actions\Users\GetUser;
@@ -9,6 +10,7 @@ use App\Actions\Users\ListUsers;
 use App\Actions\Users\DeleteUser;
 use App\DTO\User\UserData;
 use App\DTO\User\UserFilter;
+use App\Http\Requests\User\ChangeUserStatusRequest;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use Inertia\Inertia;
@@ -81,6 +83,17 @@ class UserController extends Controller
         return redirect()
             ->route('users.index')
             ->with('success', 'User updated successfully');
+    }
+
+    public function changeStatus(
+        int $id,
+        ChangeUserStatusRequest $request,
+        ChangeUserStatusAction $action
+    ) {
+        $data = $request->validated();
+        $action->execute($id, $data['is_blocked']);
+
+        return redirect()->route('users.index');
     }
 
     public function destroy(

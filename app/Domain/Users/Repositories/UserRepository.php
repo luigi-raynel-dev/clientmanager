@@ -18,4 +18,6 @@ interface UserRepository
   public function edit(int $id, UserData $data): User;
 
   public function delete(int $id): bool;
+
+  public function setIsBlocked(int $id, bool $isBlocked);
 }

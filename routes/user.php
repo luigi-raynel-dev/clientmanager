@@ -24,4 +24,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
 
     Route::delete('/users/{id}', [UserController::class, 'destroy'])
         ->name('users.destroy');
+
+    Route::patch('/users/{id}/status', [UserController::class, 'changeStatus'])
+        ->name('users.status');
 });
