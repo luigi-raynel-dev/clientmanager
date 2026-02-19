@@ -176,4 +176,48 @@ class UserTest extends TestCase
             'email' => $user->email
         ]);
     }
+
+    public function test_admin_can_block_a_user()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $user = User::factory()->create();
+
+        $this
+            ->actingAs($admin)
+            ->patch("/users/{$user->id}/status", [
+                'is_blocked' => true,
+            ])
+            ->assertRedirect("/users");
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'is_blocked' => true,
+        ]);
+    }
+
+    public function test_admin_can_unblock_a_user()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $user = User::factory()->create([
+            'is_blocked' => true,
+        ]);
+
+        $this
+            ->actingAs($admin)
+            ->patch("/users/{$user->id}/status", [
+                'is_blocked' => false,
+            ])
+            ->assertRedirect("/users");
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'is_blocked' => false,
+        ]);
+    }
 }
