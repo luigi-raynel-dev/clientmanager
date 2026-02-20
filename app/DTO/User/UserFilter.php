@@ -7,7 +7,7 @@ class UserFilter
   public function __construct(
     public ?string $search,
     public ?string $role,
-    public ?string $is_blocked,
+    public ?bool $is_blocked,
     public ?string $order_by,
     public ?string $order_direction,
     public ?int $per_page,

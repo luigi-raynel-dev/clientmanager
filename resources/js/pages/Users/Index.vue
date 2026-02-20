@@ -12,6 +12,7 @@ export type UserRoleType = 'admin' | 'user'
 export type UsersFilterProps = {
   q?: string
   role?: UserRoleType
+  is_blocked?: boolean
   order_by?: string
   order_direction?: 'asc' | 'desc'
   per_page?: number
@@ -37,7 +38,8 @@ const getUsers = (filters: UsersFilterProps) => {
 
 const search = ref(props.filters?.q ?? '')
 const form = ref({
-  role: props.filters?.role
+  role: props.filters?.role,
+  is_blocked: props.filters?.is_blocked
 })
 
 const onSort = (event: DataTableSortEvent) => {
@@ -183,19 +185,33 @@ const confirmStatusChange = (user: User) => {
         <template #header>
           <h2 class="text-lg font-semibold">Filter users</h2>
         </template>
-        <div class="flex flex-col gap-1">
-          <label>Role</label>
-          <div class="card flex justify-center">
-            <SelectButton fluid v-model="form.role" :options="[
-              { label: 'Admin', value: 'admin' },
-              { label: 'User', value: 'user' },
-            ]" optionLabel="label" optionValue="value" />
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1">
+            <label>Role</label>
+            <div class="card flex justify-center">
+              <SelectButton fluid v-model="form.role" :options="[
+                { label: 'Admin', value: 'admin' },
+                { label: 'User', value: 'user' },
+              ]" optionLabel="label" optionValue="value" />
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label>Status</label>
+            <div class="card flex justify-center">
+              <SelectButton fluid v-model="form.is_blocked" :options="[
+                { label: 'Blocked', value: 1 },
+                { label: 'Active', value: 0 },
+              ]" optionLabel="label" optionValue="value" />
+            </div>
           </div>
         </div>
         <template #footer>
           <div class="flex items-center gap-2">
             <Button severity="secondary" icon="pi pi-filter-slash" @click="() => {
-              form.role = undefined
+              form = {
+                role: undefined,
+                is_blocked: undefined
+              }
               getUsers({ ...props.filters, ...form, q: search, page: 1 })
               visible = false
             }" />

@@ -26,9 +26,8 @@ class EloquentUserRepository implements UserRepository
         $q->where('role', $role)
       )
       ->when(
-        $filter->is_blocked,
-        fn($q, $isBlocked) =>
-        $q->where('is_blocked', $isBlocked)
+        is_bool($filter->is_blocked),
+        fn($q) => $q->where('is_blocked', (int) $filter->is_blocked)
       )
       ->orderBy($filter->order_by ?? 'created_at', $filter->order_direction ?? 'desc')
       ->paginate($filter->per_page ?? 10);
