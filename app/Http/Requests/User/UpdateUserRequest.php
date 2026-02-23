@@ -30,6 +30,7 @@ class UpdateUserRequest extends FormRequest
         $user_id = request()->route('id');
         return [
             ...$this->profileRules($user_id),
+            'is_blocked' => ['sometimes', 'boolean'],
             'role' => ['required', Rule::in(['admin', 'user'])],
         ];
     }

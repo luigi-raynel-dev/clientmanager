@@ -30,6 +30,7 @@ class StoreUserRequest extends FormRequest
         return [
             ...$this->profileRules(),
             'password' => $this->passwordRules(),
+            'is_blocked' => ['sometimes', 'boolean'],
             'role' => ['required', Rule::in(['admin', 'user'])],
         ];
     }

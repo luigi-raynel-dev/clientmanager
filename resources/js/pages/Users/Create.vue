@@ -10,7 +10,7 @@ import { type BreadcrumbItem } from '@/types';
 import z from 'zod';
 import { ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
-import { SelectButton, useToast } from 'primevue';
+import { Message, SelectButton, ToggleSwitch, useToast } from 'primevue';
 
 defineProps<{}>()
 
@@ -32,6 +32,7 @@ const userSchema = z.object({
   name: z.string().min(3),
   email: z.email(),
   role: z.enum(['admin', 'user']),
+  active: z.boolean(),
   password: z.string().min(8).regex(/[A-Z]/, 'Must contain an uppercase letter').regex(/[a-z]/, 'Must contain a lowercase letter').regex(/[0-9]/, 'Must contain a number'),
   password_confirmation: z.string().min(8),
 })
@@ -48,6 +49,8 @@ const form = useForm({
   name: '',
   email: '',
   role: 'user',
+  active: true,
+  is_blocked: false,
   password: '',
   password_confirmation: '',
 })
@@ -65,6 +68,8 @@ const submit = () => {
 
     return
   }
+
+  form.is_blocked = !form.active
 
   form.post('/users',
     {
@@ -124,6 +129,15 @@ const submit = () => {
           <Password :invalid="Boolean(form.errors.password_confirmation)" v-model="form.password_confirmation" fluid
             toggle-mask :feedback="false" />
           <small class="text-red-500">{{ form.errors.password_confirmation }}</small>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center gap-2">
+            <ToggleSwitch name="active" v-model="form.active" />
+            <label for="active" :class="form.active ? 'font-bold' : ''">Active</label>
+          </div>
+          <Message v-if="form.errors.active" severity="error" size="small" variant="simple">{{
+            form.errors.active }}</Message>
         </div>
 
         <div class="flex justify-end my-4">

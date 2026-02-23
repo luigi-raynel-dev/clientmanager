@@ -9,7 +9,7 @@ import { User, type BreadcrumbItem } from '@/types';
 import z from 'zod';
 import { ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
-import { SelectButton, useToast } from 'primevue';
+import { Message, SelectButton, ToggleSwitch, useToast } from 'primevue';
 
 const props = defineProps<{
   user: User
@@ -32,14 +32,15 @@ const toast = useToast();
 const userSchema = z.object({
   name: z.string().min(3),
   email: z.email(),
-  role: z.enum(['admin', 'user'])
+  role: z.enum(['admin', 'user']),
+  active: z.boolean(),
 })
 
 const resolver = ref(zodResolver(userSchema))
 
 
 // Inertia form
-const form = useForm(props.user)
+const form = useForm({ ...props.user, active: !props.user.is_blocked })
 
 const submit = () => {
   const result = userSchema.safeParse(form.data())
@@ -54,6 +55,8 @@ const submit = () => {
 
     return
   }
+
+  form.is_blocked = !form.active
 
   form.put(`/users/${props.user.id}`,
     {
@@ -100,6 +103,15 @@ const submit = () => {
             ]" optionLabel="label" optionValue="value" />
           </div>
           <small class="text-red-500">{{ form.errors.role }}</small>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <div class="flex items-center gap-2">
+            <ToggleSwitch name="active" v-model="form.active" />
+            <span :class="form.active ? 'font-bold' : ''">Active</span>
+          </div>
+          <Message v-if="form.errors.active" severity="error" size="small" variant="simple">{{
+            form.errors.active }}</Message>
         </div>
 
         <div class="flex justify-end my-4">
