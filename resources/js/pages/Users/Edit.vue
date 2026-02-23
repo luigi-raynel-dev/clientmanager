@@ -2,14 +2,12 @@
 import { Head, useForm } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create } from '@/routes/users';
-import { Form } from '@primevue/forms'
-import InputText from 'primevue/inputtext'
-import Button from 'primevue/button'
 import { User, type BreadcrumbItem } from '@/types';
 import z from 'zod';
 import { ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
-import { Message, SelectButton, ToggleSwitch, useToast } from 'primevue';
+import { useToast } from 'primevue';
+import UserForm from '@/components/User/UserForm.vue';
 
 const props = defineProps<{
   user: User
@@ -75,50 +73,12 @@ const submit = () => {
 
 <template>
 
-  <Head title="Create Users" />
+  <Head title="Edit User" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 my-6">
-      <Form :resolver="resolver" @submit="submit" class="flex flex-col gap-4 max-w-xl w-full justify-center mx-auto">
-
-        <div class="flex flex-col gap-1">
-          <label>Name</label>
-          <InputText :invalid="Boolean(form.errors.name)" v-model="form.name" />
-          <small class="text-red-500">{{ form.errors.name }}</small>
-        </div>
-
-
-        <div class="flex flex-col gap-1">
-          <label>Email</label>
-          <InputText :invalid="Boolean(form.errors.email)" v-model="form.email" />
-          <small class="text-red-500">{{ form.errors.email }}</small>
-        </div>
-
-        <div class="flex flex-col gap-1">
-          <label>Role</label>
-          <div class="card flex justify-center">
-            <SelectButton :invalid="Boolean(form.errors.role)" fluid v-model="form.role" :options="[
-              { label: 'Admin', value: 'admin' },
-              { label: 'User', value: 'user' },
-            ]" optionLabel="label" optionValue="value" />
-          </div>
-          <small class="text-red-500">{{ form.errors.role }}</small>
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <div class="flex items-center gap-2">
-            <ToggleSwitch name="active" v-model="form.active" />
-            <span :class="form.active ? 'font-bold' : ''">Active</span>
-          </div>
-          <Message v-if="form.errors.active" severity="error" size="small" variant="simple">{{
-            form.errors.active }}</Message>
-        </div>
-
-        <div class="flex justify-end my-4">
-          <Button label="Cancel" class="p-button-text mr-2" @click="$inertia.visit(index().url)" />
-          <Button label="Edit User" icon="pi pi-user-edit" :loading="form.processing" type="submit" />
-        </div>
-      </Form>
+      <UserForm :form="form" :resolver="resolver" submit-label="Update User" submit-icon="pi pi-user-edit"
+        @submit="submit" @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>
