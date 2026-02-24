@@ -6,13 +6,13 @@ import { DataPaginator, User, type BreadcrumbItem } from '@/types';
 import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, OverlayBadge, SelectButton, useConfirm, useToast } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
+import UsersFilter from '@/components/User/UsersFilter.vue';
+import { UserFiltersType } from '@/types/user';
 
 export type UserRoleType = 'admin' | 'user'
 
-export type UsersFilterProps = {
+export type UsersFilterProps = UserFiltersType & {
   q?: string
-  role?: UserRoleType
-  is_blocked?: boolean
   order_by?: string
   order_direction?: 'asc' | 'desc'
   per_page?: number
@@ -37,7 +37,7 @@ const getUsers = (filters: UsersFilterProps) => {
 }
 
 const search = ref(props.filters?.q ?? '')
-const form = ref({
+const form = ref<UserFiltersType>({
   role: props.filters?.role,
   is_blocked: props.filters?.is_blocked
 })
@@ -169,10 +169,14 @@ const confirmStatusChange = (user: User) => {
             <InputIcon class="pi pi-search" />
             <InputText v-model="search" placeholder="Search users..." class="w-full sm:w-64" />
           </IconField>
-          <OverlayBadge v-if="form.role !== undefined" :value="form.role !== undefined ? 1 : 0">
+          <!-- <OverlayBadge v-if="form.role !== undefined" :value="form.role !== undefined ? 1 : 0">
             <Button severity="secondary" icon="pi pi-filter" @click="visible = true" />
           </OverlayBadge>
-          <Button v-else severity="secondary" icon="pi pi-filter" @click="visible = true" />
+          <Button v-else severity="secondary" icon="pi pi-filter" @click="visible = true" /> -->
+          <UsersFilter :filters="props.filters ?? {}" :apply="(filters) => {
+            form = filters
+            getUsers({ ...props.filters, ...filters, q: search, page: 1 })
+          }" />
           <Link :href="create().url" class="flex sm:hidden items-center">
             <Button icon="pi pi-user-plus" />
           </Link>
@@ -181,47 +185,7 @@ const confirmStatusChange = (user: User) => {
           <Button label="Create User" icon="pi pi-user-plus" />
         </Link>
       </div>
-      <Drawer v-model:visible="visible">
-        <template #header>
-          <h2 class="text-lg font-semibold">Filter users</h2>
-        </template>
-        <div class="flex flex-col gap-4">
-          <div class="flex flex-col gap-1">
-            <label>Role</label>
-            <div class="card flex justify-center">
-              <SelectButton fluid v-model="form.role" :options="[
-                { label: 'Admin', value: 'admin' },
-                { label: 'User', value: 'user' },
-              ]" optionLabel="label" optionValue="value" />
-            </div>
-          </div>
-          <div class="flex flex-col gap-1">
-            <label>Status</label>
-            <div class="card flex justify-center">
-              <SelectButton fluid v-model="form.is_blocked" :options="[
-                { label: 'Blocked', value: 1 },
-                { label: 'Active', value: 0 },
-              ]" optionLabel="label" optionValue="value" />
-            </div>
-          </div>
-        </div>
-        <template #footer>
-          <div class="flex items-center gap-2">
-            <Button severity="secondary" icon="pi pi-filter-slash" @click="() => {
-              form = {
-                role: undefined,
-                is_blocked: undefined
-              }
-              getUsers({ ...props.filters, ...form, q: search, page: 1 })
-              visible = false
-            }" />
-            <Button label="Apply" class="flex-auto" variant="outlined" @click="() => {
-              getUsers({ ...props.filters, ...form, q: search, page: 1 })
-              visible = false
-            }" />
-          </div>
-        </template>
-      </Drawer>
+
       <div class="card">
         <DataTable stripedRows paginator :rows="users.per_page" :totalRecords="users.total" :value="users.data"
           :rowsPerPageOptions="[5, 10, 25, 50]" filterDisplay="menu" lazy @sort="onSort" @page="onPage" :first="first"

@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import { Form } from '@primevue/forms'
+import { Form, FormProps } from '@primevue/forms'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 import Button from 'primevue/button'
 import { Message, SelectButton, ToggleSwitch } from 'primevue'
+import { InertiaForm } from '@inertiajs/vue3'
+
+export type UserFormType = {
+  name: string,
+  email: string,
+  role: string,
+  active: boolean,
+  is_blocked: boolean,
+  password?: string,
+  password_confirmation?: string,
+}
 
 defineProps<{
-  form: any
-  resolver: any
+  form: InertiaForm<UserFormType>
+  resolver: FormProps["resolver"]
   showPassword?: boolean
   submitLabel: string
   submitIcon: string
