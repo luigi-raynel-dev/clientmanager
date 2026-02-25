@@ -3,11 +3,13 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create, edit, destroy, status } from '@/routes/users';
 import { DataPaginator, User, type BreadcrumbItem } from '@/types';
-import { Button, Column, DataTable, DataTableSortEvent, Drawer, IconField, InputIcon, InputText, OverlayBadge, SelectButton, useConfirm, useToast } from 'primevue';
+import { Button, Column, DataTable, DataTableSortEvent, IconField, InputIcon, InputText, useConfirm, useToast } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 import UsersFilter from '@/components/User/UsersFilter.vue';
 import { UserFiltersType } from '@/types/user';
+import ListPageHeading from '@/components/ListPageHeading.vue';
+import SearchField from '@/components/ui/input/SearchField.vue';
 
 export type UserRoleType = 'admin' | 'user'
 
@@ -66,8 +68,6 @@ watch(
   search,
   debounce((q) => getUsers({ ...props.filters, ...form.value, q, page: 1 }), 400)
 )
-
-const visible = ref(false);
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -163,28 +163,13 @@ const confirmStatusChange = (user: User) => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
-      <div class="flex flex-row justify-between items-center">
-        <div class="w-full justify-between sm:w-auto flex items-center gap-4">
-          <IconField class="w-full sm:w-auto">
-            <InputIcon class="pi pi-search" />
-            <InputText v-model="search" placeholder="Search users..." class="w-full sm:w-64" />
-          </IconField>
-          <!-- <OverlayBadge v-if="form.role !== undefined" :value="form.role !== undefined ? 1 : 0">
-            <Button severity="secondary" icon="pi pi-filter" @click="visible = true" />
-          </OverlayBadge>
-          <Button v-else severity="secondary" icon="pi pi-filter" @click="visible = true" /> -->
-          <UsersFilter :filters="props.filters ?? {}" :apply="(filters) => {
-            form = filters
-            getUsers({ ...props.filters, ...filters, q: search, page: 1 })
-          }" />
-          <Link :href="create().url" class="flex sm:hidden items-center">
-            <Button icon="pi pi-user-plus" />
-          </Link>
-        </div>
-        <Link :href="create().url" class="hidden sm:flex items-center">
-          <Button label="Create User" icon="pi pi-user-plus" />
-        </Link>
-      </div>
+      <ListPageHeading :create-button="{ url: create().url, label: 'Create User', icon: 'pi pi-user-plus' }">
+        <SearchField v-model:search="search" />
+        <UsersFilter :filters="props.filters ?? {}" :apply="(filters) => {
+          form = filters
+          getUsers({ ...props.filters, ...filters, q: search, page: 1 })
+        }" />
+      </ListPageHeading>
 
       <div class="card">
         <DataTable stripedRows paginator :rows="users.per_page" :totalRecords="users.total" :value="users.data"
