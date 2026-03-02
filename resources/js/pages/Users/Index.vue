@@ -3,7 +3,7 @@ import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create, edit, status, destroy } from '@/routes/users';
 import { DataPaginator, User, type BreadcrumbItem } from '@/types';
-import { Column, DataTable, DataTableSortEvent } from 'primevue';
+import { Column, DataTableSortEvent } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 import UsersFilter from '@/components/User/UsersFilter.vue';
