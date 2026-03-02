@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { index, create, edit, destroy, status } from '@/routes/users';
+import { index, create, edit, status, destroy } from '@/routes/users';
 import { DataPaginator, User, type BreadcrumbItem } from '@/types';
-import { Button, Column, DataTable, DataTableSortEvent, useConfirm, useToast } from 'primevue';
+import { Column, DataTable, DataTableSortEvent } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 import UsersFilter from '@/components/User/UsersFilter.vue';
@@ -11,6 +11,8 @@ import { UserFiltersType } from '@/types/user';
 import ListPageHeading from '@/components/ListPageHeading.vue';
 import SearchField from '@/components/ui/input/SearchField.vue';
 import ToggleStatus from '@/components/ui/toggle/ToggleStatus.vue';
+import Actions from '@/components/ui/table/Actions.vue';
+import PaginatedTable from '@/components/ui/table/PaginatedTable.vue';
 
 export type UserRoleType = 'admin' | 'user'
 
@@ -77,47 +79,6 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-const confirm = useConfirm();
-const toast = useToast();
-
-const confirmDeletion = (user: User) => {
-  confirm.require({
-    message: `Do you want to delete this user: #${user.id}?`,
-    header: 'Danger Zone',
-    icon: 'pi pi-info-circle',
-    rejectLabel: 'Cancel',
-    rejectProps: {
-      label: 'Cancel',
-      severity: 'secondary',
-      outlined: true
-    },
-    acceptProps: {
-      label: 'Delete',
-      severity: 'danger'
-    },
-    accept: () => {
-      router.delete(destroy(user.id).url, {
-        onSuccess: () => {
-          toast.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'User deleted successfully',
-            life: 3000,
-          })
-        },
-        onError: () => {
-          toast.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to delete user',
-            life: 3000,
-          })
-        }
-      })
-    }
-  });
-};
-
 </script>
 
 <template>
@@ -134,43 +95,32 @@ const confirmDeletion = (user: User) => {
         }" />
       </ListPageHeading>
 
-      <div class="card">
-        <DataTable stripedRows paginator :rows="users.per_page" :totalRecords="users.total" :value="users.data"
-          :rowsPerPageOptions="[5, 10, 25, 50]" filterDisplay="menu" lazy @sort="onSort" @page="onPage" :first="first"
-          scrollable scrollHeight="70vh">
-          <Column sortable field="id" header="ID"></Column>
-          <Column sortable field="name" header="Nome"></Column>
-          <Column sortable field="email" header="Email"></Column>
-          <Column sortable field="role" header="Role"></Column>
-          <Column sortable field="is_blocked" header="Status">
-            <template #body="{ data }">
-              <ToggleStatus :status="!data.is_blocked" :url="status(data.id).url"
-                :message="`Do you want to ${data.is_blocked ? 'unblock' : 'block'} this user: #${data.id}?`"
-                :header="data.is_blocked ? 'Unblock User' : 'Block User'" :payload="{ is_blocked: !data.is_blocked }"
-                :successMessage="`User ${data.is_blocked ? 'unblocked' : 'blocked'} successfully`"
-                errorMessage="Failed to change user status"
-                :tooltip="data.is_blocked ? 'Unblock User' : 'Block User'" />
-            </template>
-          </Column>
-          <Column sortable field="created_at" header="Created At">
-            <template #body="{ data }">
-              {{ new Date(data.created_at).toLocaleDateString() }}
-            </template>
-          </Column>
-          <Column style="flex: 0 0 4rem" header="Actions">
-            <template #body="{ data }">
-              <div class="flex items-center gap-2">
-                <Link :href="edit(data.id).url" class="flex items-center">
-                  <Button type="button" severity="secondary" variant="outlined" icon="pi pi-pencil" text size="small" />
-                </Link>
-                <Button type="button" severity="danger" variant="outlined" icon="pi pi-trash" text size="small"
-                  @click="() => confirmDeletion(data)" />
-              </div>
-            </template>
-          </Column>
-          <template #footer> In total there are {{ users.total }} records.</template>
-        </DataTable>
-      </div>
+      <PaginatedTable :per_page="users.per_page" :total="users.total" :data="users.data" :onSort="onSort"
+        :onPage="onPage" :first="first">
+        <Column sortable field="id" header="ID"></Column>
+        <Column sortable field="name" header="Nome"></Column>
+        <Column sortable field="email" header="Email"></Column>
+        <Column sortable field="role" header="Role"></Column>
+        <Column sortable field="is_blocked" header="Status">
+          <template #body="{ data }">
+            <ToggleStatus :status="!data.is_blocked" :url="status(data.id).url"
+              :message="`Do you want to ${data.is_blocked ? 'unblock' : 'block'} this user: #${data.id}?`"
+              :header="data.is_blocked ? 'Unblock User' : 'Block User'" :payload="{ is_blocked: !data.is_blocked }"
+              :successMessage="`User ${data.is_blocked ? 'unblocked' : 'blocked'} successfully`"
+              errorMessage="Failed to change user status" :tooltip="data.is_blocked ? 'Unblock User' : 'Block User'" />
+          </template>
+        </Column>
+        <Column sortable field="created_at" header="Created At">
+          <template #body="{ data }">
+            {{ new Date(data.created_at).toLocaleDateString() }}
+          </template>
+        </Column>
+        <Column style="flex: 0 0 4rem" header="Actions">
+          <template #body="{ data }">
+            <Actions :edit="{ url: edit(data.id).url }" :delete="{ url: destroy(data.id).url, recordId: data.id }" />
+          </template>
+        </Column>
+      </PaginatedTable>
     </div>
   </AppLayout>
 </template>
