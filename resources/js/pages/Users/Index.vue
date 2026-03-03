@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index, create, edit, status, destroy } from '@/routes/users';
 import { DataPaginator, User, type BreadcrumbItem } from '@/types';
@@ -79,6 +79,9 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
+const page = usePage();
+const user = page.props.auth.user;
+
 </script>
 
 <template>
@@ -117,7 +120,8 @@ const breadcrumbs: BreadcrumbItem[] = [
         </Column>
         <Column style="flex: 0 0 4rem" header="Actions">
           <template #body="{ data }">
-            <Actions :edit="{ url: edit(data.id).url }" :delete="{ url: destroy(data.id).url, recordId: data.id }" />
+            <Actions v-if="user.id !== data.id" :edit="{ url: edit(data.id).url }"
+              :delete="{ url: destroy(data.id).url, recordId: data.id }" />
           </template>
         </Column>
       </PaginatedTable>
