@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Domain\Clients\Repositories\ClientRepository;
 use App\Domain\Users\Repositories\UserRepository;
+use App\Infrastructure\Persistence\Eloquent\EloquentClientRepository;
 use App\Infrastructure\Persistence\Eloquent\EloquentUserRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
@@ -21,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UserRepository::class,
             EloquentUserRepository::class
+        );
+        $this->app->bind(
+            ClientRepository::class,
+            EloquentClientRepository::class
         );
     }
 
