@@ -18,10 +18,10 @@ class ClientController extends Controller
             page: request('page'),
         );
 
-        $users = $action->execute($filter);
+        $clients = $action->execute($filter);
 
         return Inertia::render('Clients/Index', [
-            ...compact('users'),
+            ...compact('clients'),
             'filters' => request()->only(['q', 'order_by', 'order_direction']),
         ]);
     }
