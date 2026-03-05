@@ -6,6 +6,7 @@ use App\DTO\Client\ClientFilter;
 use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Domain\Clients\Repositories\ClientRepository;
+use App\DTO\Client\ClientData;
 
 class EloquentClientRepository implements ClientRepository
 {
@@ -20,5 +21,13 @@ class EloquentClientRepository implements ClientRepository
       })
       ->orderBy($filter->order_by ?? 'created_at', $filter->order_direction ?? 'desc')
       ->paginate($filter->per_page ?? 10);
+  }
+
+  public function create(ClientData $data): Client
+  {
+    return Client::create([
+      'name' => $data->name,
+      'email' => $data->email
+    ]);
   }
 }

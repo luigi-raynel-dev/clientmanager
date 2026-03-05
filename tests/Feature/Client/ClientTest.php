@@ -27,4 +27,40 @@ class ClientTest extends TestCase
                 ->has('clients')
         );
     }
+
+    public function test_admin_can_create_a_client()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $data = [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+        ];
+
+        $this
+            ->actingAs($admin)
+            ->post('/clients', $data)
+            ->assertRedirect('/clients');
+
+        $this->assertDatabaseHas('clients', [
+            'email' => $data['email'],
+        ]);
+    }
+
+    public function test_client_cannot_create_a_client()
+    {
+        $user = User::factory()->create();
+
+        $data = [
+            'name' => fake()->name(),
+            'email' => fake()->unique()->safeEmail(),
+        ];
+
+        $this
+            ->actingAs($user)
+            ->post('/clients', $data)
+            ->assertForbidden();
+    }
 }

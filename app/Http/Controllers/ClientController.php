@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Clients\CreateClient;
 use Inertia\Inertia;
 use App\Actions\Clients\ListClients;
+use App\DTO\Client\ClientData;
 use App\DTO\Client\ClientFilter;
+use App\Http\Requests\Client\StoreClientRequest;
 
 class ClientController extends Controller
 {
@@ -24,5 +27,23 @@ class ClientController extends Controller
             ...compact('clients'),
             'filters' => request()->only(['q', 'order_by', 'order_direction']),
         ]);
+    }
+
+    public function store(
+        StoreClientRequest $request,
+        CreateClient $action
+    ) {
+        $data = $request->validated();
+
+        $clientData = new ClientData(
+            name: $data['name'],
+            email: $data['email'],
+        );
+
+        $action->execute($clientData);
+
+        return redirect()
+            ->route('clients.index')
+            ->with('success', 'Client created successfully');
     }
 }
