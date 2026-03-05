@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { index } from '@/routes/clients';
+import { create, index } from '@/routes/clients';
 import { DataPaginator, User, type BreadcrumbItem } from '@/types';
 import { Column, DataTableSortEvent } from 'primevue';
 import debounce from 'lodash.debounce'
@@ -78,7 +78,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
-      <ListPageHeading :create-button="{ url: './create', label: 'Create Client', icon: 'pi pi-user-plus' }">
+      <ListPageHeading :create-button="{ url: create().url, label: 'Create Client', icon: 'pi pi-user-plus' }">
         <SearchField v-model:search="search" />
       </ListPageHeading>
 

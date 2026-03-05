@@ -7,6 +7,8 @@ use Illuminate\Validation\Rule;
 
 trait ProfileValidationRules
 {
+    private $table = User::class;
+
     /**
      * Get the validation rules used to validate user profiles.
      *
@@ -43,8 +45,8 @@ trait ProfileValidationRules
             'email',
             'max:255',
             $userId === null
-                ? Rule::unique(User::class)
-                : Rule::unique(User::class)->ignore($userId),
+                ? Rule::unique($this->table)
+                : Rule::unique($this->table)->ignore($userId),
         ];
     }
 }

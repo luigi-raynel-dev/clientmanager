@@ -28,6 +28,30 @@ class ClientTest extends TestCase
         );
     }
 
+    public function test_admin_can_access_client_create_screen()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('clients.create'))
+            ->assertStatus(200)
+            ->assertInertia(
+                fn($page) =>
+                $page->component('Clients/Create')
+            );
+    }
+
+    public function test_client_cannot_access_client_create_screen()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get(route('clients.create'))
+            ->assertForbidden();
+    }
+
     public function test_admin_can_create_a_client()
     {
         $admin = User::factory()->create([

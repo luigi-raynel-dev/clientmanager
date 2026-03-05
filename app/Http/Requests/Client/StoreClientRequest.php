@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Client;
 
 use App\Concerns\ProfileValidationRules;
+use App\Models\Client;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,6 +26,7 @@ class StoreClientRequest extends FormRequest
      */
     public function rules(): array
     {
+        $this->table = Client::class;
         return [
             ...$this->profileRules(),
         ];
