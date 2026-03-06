@@ -13,14 +13,14 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     })
         ->name('clients.create');
 
-    // Route::get('/clients/{id}/edit', [ClientController::class, 'edit'])
-    //     ->name('clients.edit');
+    Route::get('/clients/{id}/edit', [ClientController::class, 'edit'])
+        ->name('clients.edit');
 
     Route::post('/clients', [ClientController::class, 'store'])
         ->name('clients.store');
 
-    // Route::put('/clients/{id}', [ClientController::class, 'update'])
-    //     ->name('clients.update');
+    Route::put('/clients/{id}', [ClientController::class, 'update'])
+        ->name('clients.update');
 
     // Route::delete('/clients/{id}', [ClientController::class, 'destroy'])
     //     ->name('clients.destroy');

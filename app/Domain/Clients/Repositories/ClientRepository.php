@@ -11,5 +11,9 @@ interface ClientRepository
 {
   public function search(ClientFilter $filter): LengthAwarePaginator;
 
+  public function get(int $id): Client;
+
   public function create(ClientData $data): Client;
+
+  public function edit(int $id, ClientData $data): Client;
 }

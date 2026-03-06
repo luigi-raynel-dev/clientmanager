@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -86,5 +87,28 @@ class ClientTest extends TestCase
             ->actingAs($user)
             ->post('/clients', $data)
             ->assertForbidden();
+    }
+
+    public function test_admin_can_edit_a_client()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $client = Client::factory()->create();
+
+        $this
+            ->actingAs($admin)
+            ->put("/clients/{$client->id}", [
+                'name' => $client->name,
+                'email' => $client->email,
+            ])
+            ->assertRedirect("/clients");
+
+        $this->assertDatabaseHas('clients', [
+            'id' => $client->id,
+            'email' => $client->email,
+            'name' => $client->name,
+        ]);
     }
 }

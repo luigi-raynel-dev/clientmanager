@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Clients\CreateClient;
+use App\Actions\Clients\EditClient;
+use App\Actions\Clients\GetClient;
 use Inertia\Inertia;
 use App\Actions\Clients\ListClients;
 use App\DTO\Client\ClientData;
 use App\DTO\Client\ClientFilter;
 use App\Http\Requests\Client\StoreClientRequest;
+use App\Http\Requests\Client\UpdateClientRequest;
 
 class ClientController extends Controller
 {
@@ -29,6 +32,15 @@ class ClientController extends Controller
         ]);
     }
 
+    public function edit(int $id, GetClient $action)
+    {
+        $client = $action->execute($id);
+
+        return Inertia::render('Clients/Edit', [
+            'client' => $client,
+        ]);
+    }
+
     public function store(
         StoreClientRequest $request,
         CreateClient $action
@@ -45,5 +57,24 @@ class ClientController extends Controller
         return redirect()
             ->route('clients.index')
             ->with('success', 'Client created successfully');
+    }
+
+    public function update(
+        int $id,
+        UpdateClientRequest $request,
+        EditClient $action
+    ) {
+        $data = $request->validated();
+
+        $clientData = new ClientData(
+            name: $data['name'],
+            email: $data['email']
+        );
+
+        $action->execute($id, $clientData);
+
+        return redirect()
+            ->route('clients.index')
+            ->with('success', 'Client updated successfully');
     }
 }

@@ -23,11 +23,28 @@ class EloquentClientRepository implements ClientRepository
       ->paginate($filter->per_page ?? 10);
   }
 
+  public function get(int $id): Client
+  {
+    return Client::findOrFail($id);
+  }
+
   public function create(ClientData $data): Client
   {
     return Client::create([
       'name' => $data->name,
       'email' => $data->email
     ]);
+  }
+
+  public function edit(int $id, ClientData $data): Client
+  {
+    $user = Client::findOrFail($id);
+
+    $user->name = $data->name;
+    $user->email = $data->email;
+
+    $user->save();
+
+    return $user;
   }
 }
