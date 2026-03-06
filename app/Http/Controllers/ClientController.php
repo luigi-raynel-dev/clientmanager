@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Clients\CreateClient;
+use App\Actions\Clients\DeleteClient;
 use App\Actions\Clients\EditClient;
 use App\Actions\Clients\GetClient;
 use Inertia\Inertia;
@@ -76,5 +77,14 @@ class ClientController extends Controller
         return redirect()
             ->route('clients.index')
             ->with('success', 'Client updated successfully');
+    }
+
+    public function destroy(
+        int $id,
+        DeleteClient $action
+    ) {
+        $action->execute($id);
+
+        return redirect()->route('clients.index');
     }
 }

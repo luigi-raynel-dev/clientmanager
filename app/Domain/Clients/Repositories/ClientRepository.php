@@ -16,4 +16,6 @@ interface ClientRepository
   public function create(ClientData $data): Client;
 
   public function edit(int $id, ClientData $data): Client;
+
+  public function delete(int $id): bool;
 }

@@ -111,4 +111,22 @@ class ClientTest extends TestCase
             'name' => $client->name,
         ]);
     }
+
+    public function test_admin_can_delete_a_client()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $client = Client::factory()->create();
+
+        $this
+            ->actingAs($admin)
+            ->delete("/clients/{$client->id}")
+            ->assertRedirect("/clients");
+
+        $this->assertDatabaseMissing('clients', [
+            'id' => $client->id
+        ]);
+    }
 }

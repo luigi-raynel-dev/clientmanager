@@ -47,4 +47,10 @@ class EloquentClientRepository implements ClientRepository
 
     return $user;
   }
+
+  public function delete(int $id): bool
+  {
+    $client = Client::findOrFail($id);
+    return $client->delete();
+  }
 }

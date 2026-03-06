@@ -22,6 +22,6 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::put('/clients/{id}', [ClientController::class, 'update'])
         ->name('clients.update');
 
-    // Route::delete('/clients/{id}', [ClientController::class, 'destroy'])
-    //     ->name('clients.destroy');
+    Route::delete('/clients/{id}', [ClientController::class, 'destroy'])
+        ->name('clients.destroy');
 });
