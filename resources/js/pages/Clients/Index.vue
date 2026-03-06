@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { create, index } from '@/routes/clients';
-import { DataPaginator, User, type BreadcrumbItem } from '@/types';
+import { create, edit, index } from '@/routes/clients';
+import { DataPaginator, type BreadcrumbItem } from '@/types';
 import { Column, DataTableSortEvent } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
@@ -94,7 +94,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         </Column>
         <Column style="flex: 0 0 4rem" header="Actions">
           <template #body="{ data }">
-            <Actions :edit="{ url: './' + data.id + '/edit' }" :delete="{ url: './' + data.id, recordId: data.id }" />
+            <Actions :edit="{ url: edit(data.id).url }" :delete="{ url: './' + data.id, recordId: data.id }" />
           </template>
         </Column>
       </PaginatedTable>
