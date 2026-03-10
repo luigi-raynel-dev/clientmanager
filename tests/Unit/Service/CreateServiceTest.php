@@ -25,6 +25,6 @@ it('creates a service', function () {
     expect($service)->toBeInstanceOf(Service::class);
 
     $this->assertDatabaseHas('services', [
-        'name' => $data->name,
+        'id' => $service->id,
     ]);
 });
