@@ -3,11 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Services\CreateService;
+use App\Actions\Services\ListServices;
 use App\DTO\Service\ServiceData;
+use App\DTO\Service\ServiceFilter;
 use App\Http\Requests\Service\StoreServiceRequest;
+use Inertia\Inertia;
 
 class ServiceController extends Controller
 {
+    public function index(ListServices $action)
+    {
+        $filter = new ServiceFilter(
+            search: request('q'),
+            order_by: request('order_by'),
+            order_direction: request('order_direction'),
+            per_page: request('per_page'),
+            page: request('page'),
+        );
+
+        $services = $action->execute($filter);
+
+        return Inertia::render('Services/Index', [
+            ...compact('services'),
+            'filters' => request()->only(['q', 'order_by', 'order_direction']),
+        ]);
+    }
+
     public function store(
         StoreServiceRequest $request,
         CreateService $action

@@ -10,6 +10,37 @@ class ServiceTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_it_lists_services()
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user);
+
+        $response = $this->get(route('services.index'));
+
+        $response->assertInertia(
+            fn($page) =>
+            $page
+                ->component('Services/Index')
+                ->has('services')
+        );
+    }
+
+    public function test_user_can_access_service_create_screen()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('services.create'))
+            ->assertStatus(200)
+            ->assertInertia(
+                fn($page) =>
+                $page->component('Services/Create')
+            );
+    }
+
     public function test_admin_can_create_a_service()
     {
         $admin = User::factory()->create([
