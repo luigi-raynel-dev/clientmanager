@@ -3,7 +3,7 @@ import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { create, index } from '@/routes/services';
 import { DataPaginator, type BreadcrumbItem } from '@/types';
-import { Card, DataTableSortEvent } from 'primevue';
+import { Card } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 import ListPageHeading from '@/components/ListPageHeading.vue';

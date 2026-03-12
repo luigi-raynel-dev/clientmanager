@@ -37,10 +37,10 @@ class ServiceController extends Controller
 
         $serviceData = new ServiceData(
             name: $data['name'],
-            description: $data['description'],
-            base_price: $data['base_price'],
-            price_type: $data['price_type'],
-            estimated_duration_hours: $data['estimated_duration_hours'],
+            description: $data['description'] ?? null,
+            base_price: $data['base_price'] ?? null,
+            price_type: $data['price_type'] ?? null,
+            estimated_duration_hours: $data['estimated_duration_hours'] ?? null,
             other_price_type: $data['other_price_type'] ?? null,
             is_active: $data['is_active'] ?? true
         );

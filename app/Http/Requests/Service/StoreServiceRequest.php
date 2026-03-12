@@ -28,8 +28,8 @@ class StoreServiceRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255', 'unique:services,name'],
             'description' => ['nullable', 'string'],
-            'base_price' => ['required', 'numeric', 'min:0'],
-            'price_type' => ['required', 'string', 'in:fixed,unit,hourly,daily'],
+            'base_price' => ['nullable', 'numeric', 'min:0'],
+            'price_type' => ['nullable', 'string', 'in:fixed,unit,hourly,daily'],
             'estimated_duration_hours' => ['nullable', 'numeric', 'min:0'],
             'other_price_type' => ['nullable', 'string', 'max:255'],
             'is_active' => ['boolean'],
