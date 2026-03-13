@@ -43,23 +43,26 @@ const searchPriceType = (event: any) => {
 }
 
 const handlePriceTypeChange = (value: any) => {
-  if (!value) return
+  if (!value) {
+    props.form.price_type = undefined
+    props.form.other_price_type = undefined
+    return;
+  }
 
   if (typeof value === 'object') {
     props.form.price_type = value.value
     props.form.other_price_type = undefined
+    return;
   }
 
-  else {
-    const found = priceTypeOptions.find(o => o.value === value)
+  const found = priceTypeOptions.find(o => o.value === value)
 
-    if (found) {
-      props.form.price_type = found.value
-      props.form.other_price_type = undefined
-    } else {
-      props.form.price_type = undefined
-      props.form.other_price_type = value
-    }
+  if (found) {
+    props.form.price_type = found.value
+    props.form.other_price_type = undefined
+  } else {
+    props.form.price_type = undefined
+    props.form.other_price_type = value
   }
 }
 </script>

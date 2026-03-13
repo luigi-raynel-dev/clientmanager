@@ -43,8 +43,8 @@ const form = useForm({
   description: '',
   price_type: 'fixed',
   other_price_type: '',
-  base_price: 0.00,
-  estimated_duration_hours: 0,
+  base_price: undefined,
+  estimated_duration_hours: undefined,
   is_active: true,
 } as ServiceFormType)
 
