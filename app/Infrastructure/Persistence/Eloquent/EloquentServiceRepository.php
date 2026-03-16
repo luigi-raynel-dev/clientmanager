@@ -19,6 +19,9 @@ class EloquentServiceRepository implements ServiceRepository
             ->orWhere('description', 'like', "%{$search}%");
         });
       })
+      ->when($filter->is_active !== null, function ($q) use ($filter) {
+        $q->where('is_active', $filter->is_active);
+      })
       ->orderBy($filter->order_by ?? 'created_at', $filter->order_direction ?? 'desc')
       ->paginate($filter->per_page ?? 10);
   }

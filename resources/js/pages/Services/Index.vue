@@ -8,11 +8,13 @@ import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 import ListPageHeading from '@/components/ListPageHeading.vue';
 import SearchField from '@/components/ui/input/SearchField.vue';
-import { Service } from '@/types/service';
+import { Service, ServiceFiltersType } from '@/types/service';
 import { Clock } from 'lucide-vue-next';
+import ServicesFilter from '@/components/Service/ServicesFilter.vue';
 
 export type ServiceFilterProps = {
   q?: string
+  is_active?: boolean
   order_by?: string
   order_direction?: 'asc' | 'desc'
   per_page?: number
@@ -29,7 +31,7 @@ watch(() => props.services.current_page, (page) => {
   first.value = ((Number(page) || 1) - 1) * props.services.per_page
 })
 
-const getService = (filters: ServiceFilterProps) => {
+const getServices = (filters: ServiceFilterProps) => {
   router.get(index().url, { ...filters }, {
     preserveState: true,
     replace: true,
@@ -37,10 +39,17 @@ const getService = (filters: ServiceFilterProps) => {
 }
 
 const search = ref(props.filters?.q ?? '')
+const form = ref<ServiceFiltersType>({
+  is_active: props.filters?.is_active,
+  order_by: props.filters?.order_by,
+  order_direction: props.filters?.order_direction,
+  per_page: props.filters?.per_page,
+})
+
 
 watch(
   search,
-  debounce((q) => getService({ ...props.filters, q, page: 1 }), 400)
+  debounce((q) => getServices({ ...props.filters, q, page: 1 }), 400)
 )
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -53,7 +62,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 const onPageChange = (event: any) => {
   const page = event.page + 1
 
-  getService({
+  getServices({
     ...props.filters,
     page
   })
@@ -69,6 +78,10 @@ const onPageChange = (event: any) => {
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
       <ListPageHeading :create-button="{ url: create().url, label: 'Create Service' }">
         <SearchField v-model:search="search" />
+        <ServicesFilter :filters="props.filters ?? {}" :apply="(filters) => {
+          form = filters
+          getServices({ ...props.filters, ...filters, q: search, page: 1 })
+        }" />
       </ListPageHeading>
 
       <div class="flex flex-col gap-6">

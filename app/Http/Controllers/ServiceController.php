@@ -15,6 +15,7 @@ class ServiceController extends Controller
     {
         $filter = new ServiceFilter(
             search: request('q'),
+            is_active: request('is_active'),
             order_by: request('order_by'),
             order_direction: request('order_direction'),
             per_page: request('per_page'),

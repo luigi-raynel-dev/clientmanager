@@ -10,3 +10,10 @@ export type Service = {
     created_at: string;
     updated_at: string;
 };
+
+export type ServiceFiltersType = {
+    is_active?: boolean;
+    order_by?: string;
+    order_direction?: 'asc' | 'desc';
+    per_page?: number;
+};
