@@ -26,7 +26,7 @@ class ServiceTest extends TestCase
         );
     }
 
-    public function test_user_can_access_service_create_screen()
+    public function test_admin_can_access_service_create_screen()
     {
         $admin = User::factory()->create([
             'role' => 'admin',

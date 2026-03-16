@@ -3,7 +3,7 @@ import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { create, index } from '@/routes/services';
 import { DataPaginator, type BreadcrumbItem } from '@/types';
-import { Card } from 'primevue';
+import { Card, Paginator } from 'primevue';
 import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 import ListPageHeading from '@/components/ListPageHeading.vue';
@@ -50,6 +50,15 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
+const onPageChange = (event: any) => {
+  const page = event.page + 1
+
+  getService({
+    ...props.filters,
+    page
+  })
+}
+
 </script>
 
 <template>
@@ -94,6 +103,9 @@ const breadcrumbs: BreadcrumbItem[] = [
             </p>
           </template>
         </Card>
+
+        <Paginator :rows="props.services.per_page" :totalRecords="props.services.total" :first="first"
+          @page="onPageChange" />
       </div>
     </div>
   </AppLayout>
