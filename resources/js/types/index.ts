@@ -12,3 +12,8 @@ export type AppPageProps<
     sidebarOpen: boolean;
     [key: string]: unknown;
 };
+
+export type SortOption = {
+    order_by?: string;
+    order_direction?: 'asc' | 'desc';
+};

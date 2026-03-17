@@ -1,3 +1,5 @@
+import { SortOption } from '.';
+
 export type Service = {
     id: number;
     name: string;
@@ -11,9 +13,7 @@ export type Service = {
     updated_at: string;
 };
 
-export type ServiceFiltersType = {
-    is_active?: boolean;
-    order_by?: string;
-    order_direction?: 'asc' | 'desc';
+export type ServiceFiltersType = SortOption & {
+    is_active?: number;
     per_page?: number;
 };

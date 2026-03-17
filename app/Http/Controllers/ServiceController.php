@@ -26,7 +26,7 @@ class ServiceController extends Controller
 
         return Inertia::render('Services/Index', [
             ...compact('services'),
-            'filters' => request()->only(['q', 'order_by', 'order_direction']),
+            'filters' => request()->only(['q', 'order_by', 'order_direction', 'is_active']),
         ]);
     }
 
