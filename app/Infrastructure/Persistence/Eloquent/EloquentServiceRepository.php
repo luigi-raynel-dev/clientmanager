@@ -26,6 +26,11 @@ class EloquentServiceRepository implements ServiceRepository
       ->paginate($filter->per_page ?? 10);
   }
 
+  public function get(int $id): Service
+  {
+    return Service::findOrFail($id);
+  }
+
   public function create(ServiceData $data): Service
   {
     return Service::create([
@@ -37,5 +42,22 @@ class EloquentServiceRepository implements ServiceRepository
       'estimated_duration_hours' => $data->estimated_duration_hours,
       'is_active' => $data->is_active
     ]);
+  }
+
+  public function edit(int $id, ServiceData $data): Service
+  {
+    $service = Service::findOrFail($id);
+
+    $service->name = $data->name;
+    $service->description = $data->description;
+    $service->base_price = $data->base_price;
+    $service->price_type = $data->price_type;
+    $service->other_price_type = $data->other_price_type;
+    $service->estimated_duration_hours = $data->estimated_duration_hours;
+    $service->is_active = $data->is_active;
+
+    $service->save();
+
+    return $service;
   }
 }

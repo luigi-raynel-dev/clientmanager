@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\services\EditService;
 use App\Actions\Services\CreateService;
+use App\Actions\Services\GetService;
 use App\Actions\Services\ListServices;
 use App\DTO\Service\ServiceData;
 use App\DTO\Service\ServiceFilter;
+use App\Http\Requests\Service\UpdateServiceRequest;
 use App\Http\Requests\Service\StoreServiceRequest;
 use Inertia\Inertia;
 
@@ -30,6 +33,15 @@ class ServiceController extends Controller
         ]);
     }
 
+    public function edit(int $id, GetService $action)
+    {
+        $service = $action->execute($id);
+
+        return Inertia::render('Services/Edit', [
+            'service' => $service,
+        ]);
+    }
+
     public function store(
         StoreServiceRequest $request,
         CreateService $action
@@ -51,5 +63,29 @@ class ServiceController extends Controller
         return redirect()
             ->route('services.index')
             ->with('success', 'Service created successfully');
+    }
+
+    public function update(
+        int $id,
+        UpdateServiceRequest $request,
+        EditService $action
+    ) {
+        $data = $request->validated();
+
+        $serviceData = new ServiceData(
+            name: $data['name'],
+            description: $data['description'] ?? null,
+            base_price: $data['base_price'] ?? null,
+            price_type: $data['price_type'] ?? null,
+            estimated_duration_hours: $data['estimated_duration_hours'] ?? null,
+            other_price_type: $data['other_price_type'] ?? null,
+            is_active: is_null($data['is_active']) ? true : $data['is_active']
+        );
+
+        $action->execute($id, $serviceData);
+
+        return redirect()
+            ->route('services.index')
+            ->with('success', 'Service updated successfully');
     }
 }

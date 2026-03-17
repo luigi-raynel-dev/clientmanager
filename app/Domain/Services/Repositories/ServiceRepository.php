@@ -11,5 +11,9 @@ interface ServiceRepository
 {
   public function search(ServiceFilter $filter): LengthAwarePaginator;
 
+  public function get(int $id): Service;
+
   public function create(ServiceData $data): Service;
+
+  public function edit(int $id, ServiceData $data): Service;
 }

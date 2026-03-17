@@ -17,6 +17,7 @@ it('lists services', function () {
         order_direction: 'desc',
         per_page: 15,
         page: 1,
+        is_active: null
     );
 
     $action = new ListServices(new EloquentServiceRepository());
