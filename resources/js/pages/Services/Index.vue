@@ -14,7 +14,7 @@ import ServicesFilter from '@/components/Service/ServicesFilter.vue';
 
 export type ServiceFilterProps = {
   q?: string
-  is_active?: boolean
+  is_active?: number
   order_by?: string
   order_direction?: 'asc' | 'desc'
   per_page?: number
@@ -61,10 +61,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 const onPageChange = (event: any) => {
   const page = event.page + 1
+  const per_page = event.rows
 
   getServices({
     ...props.filters,
-    page
+    page,
+    per_page
   })
 }
 
@@ -118,7 +120,7 @@ const onPageChange = (event: any) => {
         </Card>
 
         <Paginator :rows="props.services.per_page" :totalRecords="props.services.total" :first="first"
-          @page="onPageChange" />
+          @page="onPageChange" :rowsPerPageOptions="[5, 10, 25, 50]" />
       </div>
     </div>
   </AppLayout>
