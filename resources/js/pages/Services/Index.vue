@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { create, index } from '@/routes/services';
+import { create, edit, index } from '@/routes/services';
 import { DataPaginator, type BreadcrumbItem } from '@/types';
 import { Card, Paginator } from 'primevue';
 import debounce from 'lodash.debounce'
@@ -11,6 +11,7 @@ import SearchField from '@/components/ui/input/SearchField.vue';
 import { Service, ServiceFiltersType } from '@/types/service';
 import { Clock } from 'lucide-vue-next';
 import ServicesFilter from '@/components/Service/ServicesFilter.vue';
+import Actions from '@/components/ui/table/Actions.vue';
 
 export type ServiceFilterProps = {
   q?: string
@@ -95,8 +96,11 @@ const onPageChange = (event: any) => {
         </p>
         <Card v-for="service in props.services.data" :key="service.id" class="w-full">
           <template #title>
-            <div class="w-full">
-              {{ service.name }}
+            <div class="w-full flex justify-between align-center">
+              <span>
+                {{ service.name }}
+              </span>
+              <Actions :edit="{ url: edit(service.id).url }" />
             </div>
           </template>
           <template #subtitle>
