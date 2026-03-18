@@ -113,4 +113,22 @@ class ServiceTest extends TestCase
             'name' => $data['name'],
         ]);
     }
+
+    public function test_admin_can_delete_a_service()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $service = Service::factory()->create();
+
+        $this
+            ->actingAs($admin)
+            ->delete("/services/{$service->id}")
+            ->assertRedirect("/services");
+
+        $this->assertDatabaseMissing('services', [
+            'id' => $service->id
+        ]);
+    }
 }
