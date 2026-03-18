@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Services\ChangeServiceStatusAction;
 use App\Actions\services\EditService;
 use App\Actions\Services\CreateService;
 use App\Actions\Services\DeleteService;
@@ -9,6 +10,7 @@ use App\Actions\Services\GetService;
 use App\Actions\Services\ListServices;
 use App\DTO\Service\ServiceData;
 use App\DTO\Service\ServiceFilter;
+use App\Http\Requests\Service\ChangeServiceStatusRequest;
 use App\Http\Requests\Service\UpdateServiceRequest;
 use App\Http\Requests\Service\StoreServiceRequest;
 use Inertia\Inertia;
@@ -88,6 +90,17 @@ class ServiceController extends Controller
         return redirect()
             ->route('services.index')
             ->with('success', 'Service updated successfully');
+    }
+
+    public function changeStatus(
+        int $id,
+        ChangeServiceStatusRequest $request,
+        ChangeServiceStatusAction $action
+    ) {
+        $data = $request->validated();
+        $action->execute($id, $data['is_active']);
+
+        return redirect()->route('services.index');
     }
 
     public function destroy(

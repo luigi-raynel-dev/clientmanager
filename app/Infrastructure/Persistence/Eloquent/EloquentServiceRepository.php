@@ -61,6 +61,13 @@ class EloquentServiceRepository implements ServiceRepository
     return $service;
   }
 
+  public function setIsActive(int $id, bool $isActive)
+  {
+    $service = Service::findOrFail($id);
+    $service->is_active = $isActive;
+    $service->save();
+  }
+
   public function delete(int $id): bool
   {
     $service = Service::findOrFail($id);

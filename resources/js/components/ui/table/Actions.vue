@@ -61,6 +61,7 @@ const confirmDeletion = () => {
 
 <template>
   <div class="flex items-center gap-2">
+    <slot />
     <Link v-if="props.edit" :href="props.edit.url" class="flex items-center">
       <Button type="button" severity="secondary" variant="outlined" icon="pi pi-pencil" text size="small" />
     </Link>

@@ -23,6 +23,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/services/{id}', [ServiceController::class, 'update'])
             ->name('services.update');
 
+        Route::patch('/services/{id}/status', [ServiceController::class, 'changeStatus'])
+            ->name('services.status');
+
         Route::delete('/services/{id}', [ServiceController::class, 'destroy'])
             ->name('services.destroy');
     });

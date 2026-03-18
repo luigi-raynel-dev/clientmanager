@@ -18,4 +18,6 @@ interface ServiceRepository
   public function edit(int $id, ServiceData $data): Service;
 
   public function delete(int $id): bool;
+
+  public function setIsActive(int $id, bool $isActive);
 }
