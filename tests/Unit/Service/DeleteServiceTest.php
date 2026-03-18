@@ -15,7 +15,7 @@ it('deletes a service', function () {
 
     $action->execute($service->id);
 
-    $this->assertDatabaseMissing('services', [
+    $this->assertSoftDeleted('services', [
         'id' => $service->id,
     ]);
 });

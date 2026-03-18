@@ -60,4 +60,10 @@ class EloquentServiceRepository implements ServiceRepository
 
     return $service;
   }
+
+  public function delete(int $id): bool
+  {
+    $service = Service::findOrFail($id);
+    return $service->delete();
+  }
 }

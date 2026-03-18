@@ -127,7 +127,7 @@ class ServiceTest extends TestCase
             ->delete("/services/{$service->id}")
             ->assertRedirect("/services");
 
-        $this->assertDatabaseMissing('services', [
+        $this->assertSoftDeleted('services', [
             'id' => $service->id
         ]);
     }

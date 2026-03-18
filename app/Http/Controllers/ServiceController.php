@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\services\EditService;
 use App\Actions\Services\CreateService;
+use App\Actions\Services\DeleteService;
 use App\Actions\Services\GetService;
 use App\Actions\Services\ListServices;
 use App\DTO\Service\ServiceData;
@@ -87,5 +88,14 @@ class ServiceController extends Controller
         return redirect()
             ->route('services.index')
             ->with('success', 'Service updated successfully');
+    }
+
+    public function destroy(
+        int $id,
+        DeleteService $action
+    ) {
+        $action->execute($id);
+
+        return redirect()->route('services.index');
     }
 }

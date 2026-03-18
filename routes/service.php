@@ -23,7 +23,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/services/{id}', [ServiceController::class, 'update'])
             ->name('services.update');
 
-        // Route::delete('/services/{id}', [ServiceController::class, 'destroy'])
-        //     ->name('services.destroy');
+        Route::delete('/services/{id}', [ServiceController::class, 'destroy'])
+            ->name('services.destroy');
     });
 });

@@ -16,4 +16,6 @@ interface ServiceRepository
   public function create(ServiceData $data): Service;
 
   public function edit(int $id, ServiceData $data): Service;
+
+  public function delete(int $id): bool;
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { create, edit, index } from '@/routes/services';
+import { create, destroy, edit, index } from '@/routes/services';
 import { DataPaginator, type BreadcrumbItem } from '@/types';
 import { Card, Paginator } from 'primevue';
 import debounce from 'lodash.debounce'
@@ -100,7 +100,8 @@ const onPageChange = (event: any) => {
               <span>
                 {{ service.name }}
               </span>
-              <Actions :edit="{ url: edit(service.id).url }" />
+              <Actions :edit="{ url: edit(service.id).url }"
+                :delete="{ url: destroy(service.id).url, recordId: service.id }" />
             </div>
           </template>
           <template #subtitle>
