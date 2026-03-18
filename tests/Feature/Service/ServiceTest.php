@@ -131,4 +131,50 @@ class ServiceTest extends TestCase
             'id' => $service->id
         ]);
     }
+
+    public function test_admin_can_active_a_service()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $service = Service::factory()->create([
+            'is_active' => false,
+        ]);
+
+        $this
+            ->actingAs($admin)
+            ->patch("/services/{$service->id}/status", [
+                'is_active' => true,
+            ])
+            ->assertRedirect("/services");
+
+        $this->assertDatabaseHas('services', [
+            'id' => $service->id,
+            'is_active' => true,
+        ]);
+    }
+
+    public function test_admin_can_deactive_a_service()
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+        ]);
+
+        $service = Service::factory()->create([
+            'is_active' => true,
+        ]);
+
+        $this
+            ->actingAs($admin)
+            ->patch("/services/{$service->id}/status", [
+                'is_active' => false,
+            ])
+            ->assertRedirect("/services");
+
+        $this->assertDatabaseHas('services', [
+            'id' => $service->id,
+            'is_active' => false,
+        ]);
+    }
 }
