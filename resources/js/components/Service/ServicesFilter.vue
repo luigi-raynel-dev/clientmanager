@@ -61,7 +61,7 @@
     }" :apply="() => props.apply(form)" :total="getFilterCount()">
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
-          <label>Status {{ form.is_active }}</label>
+          <label>Status</label>
           <div class="card flex justify-center">
             <SelectButton fluid v-model="form.is_active" :options="[
               { label: 'Active', value: 1 },

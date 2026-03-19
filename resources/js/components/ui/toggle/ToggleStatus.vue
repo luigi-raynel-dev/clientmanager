@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
-import { Button, useConfirm, useToast } from 'primevue'
+import { Button, ToggleSwitch, useConfirm, useToast } from 'primevue'
 
 const props = defineProps<{
+  variant?: 'button' | 'switch'
   status: boolean
+  statusLabel?: string
   url: string
   message: string
   header: string
@@ -58,6 +60,10 @@ const confirmStatusChange = () => {
 </script>
 
 <template>
-  <Button v-tooltip="tooltip" type="button" :severity="status ? 'success' : 'danger'" variant="outlined"
+  <div v-if="variant === 'switch'" class="flex items-center gap-2">
+    <ToggleSwitch :model-value="status" @click.prevent="confirmStatusChange" />
+    <span :class="status ? 'font-bold' : ''">{{ statusLabel || 'Active' }}</span>
+  </div>
+  <Button v-else v-tooltip="tooltip" type="button" :severity="status ? 'success' : 'danger'" variant="outlined"
     :icon="status ? 'pi pi-check-circle' : 'pi pi-ban'" text size="small" @click="confirmStatusChange" />
 </template>
