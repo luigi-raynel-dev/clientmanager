@@ -107,8 +107,9 @@ const onPageChange = (event: any) => {
                   service.other_price_type || service.price_type || 'fixed'
                 }}
               </span>
-              <span v-if="Boolean(service.estimated_duration_hours)" class="flex items-center gap-1">
-                <Clock class="size-4" /> {{ service.estimated_duration_hours }} hours
+              <span v-if="Boolean(service.estimated_duration_minutes)" class="flex items-center gap-1">
+                <Clock class="size-4" /> {{ service.estimated_duration_minutes }} {{ service.estimated_duration_type ||
+                'minutes' }}
               </span>
             </div>
 

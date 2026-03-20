@@ -17,7 +17,8 @@ it('edits a service', function () {
         description: $service->description ?? null,
         base_price: $service->base_price ?? null,
         price_type: $service->price_type ?? null,
-        estimated_duration_hours: $service->estimated_duration_hours ?? null,
+        estimated_duration_minutes: $service->estimated_duration_minutes ?? null,
+        estimated_duration_type: $service->estimated_duration_type ?? null,
         other_price_type: $service->other_price_type ?? null,
         is_active: $service->is_active
     );

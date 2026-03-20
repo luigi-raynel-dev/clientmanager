@@ -22,7 +22,7 @@ class Service extends Model
         'base_price',
         'price_type',
         'other_price_type',
-        'estimated_duration_hours',
+        'estimated_duration_minutes',
         'is_active',
     ];
 }

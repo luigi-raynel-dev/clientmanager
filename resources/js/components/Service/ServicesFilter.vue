@@ -31,8 +31,8 @@
     { label: 'Name (Z-A)', value: { order_by: 'name', order_direction: 'desc' } },
     { label: 'Price (Low to High)', value: { order_by: 'base_price', order_direction: 'asc' } },
     { label: 'Price (High to Low)', value: { order_by: 'base_price', order_direction: 'desc' } },
-    { label: 'Estimated Hours (Low to High)', value: { order_by: 'estimated_duration_hours', order_direction: 'asc' } },
-    { label: 'Estimated Hours (High to Low)', value: { order_by: 'estimated_duration_hours', order_direction: 'desc' } },
+    { label: 'Estimated Hours (Low to High)', value: { order_by: 'estimated_duration_minutes', order_direction: 'asc' } },
+    { label: 'Estimated Hours (High to Low)', value: { order_by: 'estimated_duration_minutes', order_direction: 'desc' } },
   ]
 
   const selectedSort = ref<sortOptionsStructure>()

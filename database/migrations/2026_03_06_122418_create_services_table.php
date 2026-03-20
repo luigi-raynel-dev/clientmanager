@@ -18,7 +18,8 @@ return new class extends Migration
             $table->decimal('base_price', 10, 2)->nullable();
             $table->enum('price_type', ['fixed', 'unit', 'hourly', 'daily'])->nullable();
             $table->string('other_price_type', 255)->nullable();
-            $table->decimal('estimated_duration_hours', 8, 2)->nullable();
+            $table->decimal('estimated_duration_minutes', 8, 2)->nullable();
+            $table->enum('estimated_duration_type', ['minutes', 'hours', 'days', 'weeks', 'months'])->nullable()->after('estimated_duration_minutes');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();

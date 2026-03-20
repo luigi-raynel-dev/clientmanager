@@ -39,7 +39,8 @@ class EloquentServiceRepository implements ServiceRepository
       'base_price' => $data->base_price,
       'price_type' => $data->price_type,
       'other_price_type' => $data->other_price_type,
-      'estimated_duration_hours' => $data->estimated_duration_hours,
+      'estimated_duration_minutes' => $data->estimated_duration_minutes,
+      'estimated_duration_type' => $data->estimated_duration_type,
       'is_active' => $data->is_active
     ]);
   }
@@ -53,7 +54,7 @@ class EloquentServiceRepository implements ServiceRepository
     $service->base_price = $data->base_price;
     $service->price_type = $data->price_type;
     $service->other_price_type = $data->other_price_type;
-    $service->estimated_duration_hours = $data->estimated_duration_hours;
+    $service->estimated_duration_minutes = $data->estimated_duration_minutes;
     $service->is_active = $data->is_active;
 
     $service->save();

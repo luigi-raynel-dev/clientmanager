@@ -13,7 +13,7 @@ export type ServiceFormType = {
   base_price?: number;
   price_type?: string;
   other_price_type?: string;
-  estimated_duration_hours?: number;
+  estimated_duration_minutes?: number;
   is_active: boolean;
 };
 
@@ -90,11 +90,11 @@ const handlePriceTypeChange = (value: any) => {
       </label>
       <IconField class="w-full sm:w-auto">
         <InputIcon class="pi pi-clock" />
-        <InputNumber fluid :invalid="Boolean(form.errors.estimated_duration_hours)"
-          v-model="form.estimated_duration_hours" />
+        <InputNumber fluid :invalid="Boolean(form.errors.estimated_duration_minutes)"
+          v-model="form.estimated_duration_minutes" />
       </IconField>
 
-      <small class="text-red-500">{{ form.errors.estimated_duration_hours }}</small>
+      <small class="text-red-500">{{ form.errors.estimated_duration_minutes }}</small>
     </div>
 
     <Card>

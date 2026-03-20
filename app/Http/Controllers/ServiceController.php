@@ -56,7 +56,7 @@ class ServiceController extends Controller
             description: $data['description'] ?? null,
             base_price: $data['base_price'] ?? null,
             price_type: $data['price_type'] ?? null,
-            estimated_duration_hours: $data['estimated_duration_hours'] ?? null,
+            estimated_duration_minutes: $data['estimated_duration_minutes'] ?? null,
             other_price_type: $data['other_price_type'] ?? null,
             is_active: $data['is_active'] ?? true
         );
@@ -80,7 +80,8 @@ class ServiceController extends Controller
             description: $data['description'] ?? null,
             base_price: $data['base_price'] ?? null,
             price_type: $data['price_type'] ?? null,
-            estimated_duration_hours: $data['estimated_duration_hours'] ?? null,
+            estimated_duration_minutes: $data['estimated_duration_minutes'] ?? null,
+            estimated_duration_type: $data['estimated_duration_type'] ?? null,
             other_price_type: $data['other_price_type'] ?? null,
             is_active: is_null($data['is_active']) ? true : $data['is_active']
         );

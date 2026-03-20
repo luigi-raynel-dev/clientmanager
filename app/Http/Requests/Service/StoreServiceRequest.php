@@ -30,7 +30,7 @@ class StoreServiceRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'base_price' => ['nullable', 'numeric', 'min:0'],
             'price_type' => ['nullable', 'string', 'in:fixed,unit,hourly,daily'],
-            'estimated_duration_hours' => ['nullable', 'numeric', 'min:0'],
+            'estimated_duration_minutes' => ['nullable', 'numeric', 'min:0'],
             'other_price_type' => ['nullable', 'string', 'max:255'],
             'is_active' => ['boolean'],
         ];

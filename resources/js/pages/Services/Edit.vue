@@ -34,7 +34,7 @@ const serviceSchema = z.object({
   base_price: z.number().nullable().nullish(),
   price_type: z.string().nullable().nullish(),
   other_price_type: z.string().nullable().nullish(),
-  estimated_duration_hours: z.number().nullable().nullish(),
+  estimated_duration_minutes: z.number().nullable().nullish(),
   is_active: z.boolean(),
 })
 
@@ -46,7 +46,7 @@ console.log(props.service)
 const form = useForm({
   ...props.service,
   base_price: Number(props.service.base_price),
-  estimated_duration_hours: Number(props.service.estimated_duration_hours),
+  estimated_duration_minutes: Number(props.service.estimated_duration_minutes),
   is_active: Boolean(props.service.is_active),
 })
 
