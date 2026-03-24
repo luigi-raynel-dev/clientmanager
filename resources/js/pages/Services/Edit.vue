@@ -9,6 +9,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue';
 import ServiceForm from '@/components/Service/ServiceForm.vue';
 import { Service } from '@/types/service';
+import { convertFromMinutes, convertToMinutes } from '@/utils/time';
 
 const props = defineProps<{
   service: Service
@@ -35,6 +36,7 @@ const serviceSchema = z.object({
   price_type: z.string().nullable().nullish(),
   other_price_type: z.string().nullable().nullish(),
   estimated_duration_minutes: z.number().nullable().nullish(),
+  estimated_duration_type: z.enum(['minutes', 'hours', 'days', 'weeks', 'months']),
   is_active: z.boolean(),
 })
 
@@ -46,7 +48,7 @@ console.log(props.service)
 const form = useForm({
   ...props.service,
   base_price: Number(props.service.base_price),
-  estimated_duration_minutes: Number(props.service.estimated_duration_minutes),
+  estimated_duration_minutes: convertFromMinutes(Number(props.service.estimated_duration_minutes), props.service.estimated_duration_type),
   is_active: Boolean(props.service.is_active),
 })
 
@@ -62,6 +64,10 @@ const submit = () => {
     }
 
     return
+  }
+
+  if (form.estimated_duration_minutes) {
+    form.estimated_duration_minutes = convertToMinutes(form.estimated_duration_minutes, form.estimated_duration_type)
   }
 
   form.put(`/services/${props.service.id}`,

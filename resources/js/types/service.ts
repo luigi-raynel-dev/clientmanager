@@ -8,7 +8,7 @@ export type Service = {
     price_type?: string;
     other_price_type?: string;
     estimated_duration_minutes?: number;
-    estimated_duration_type?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
+    estimated_duration_type: 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
     is_active: boolean;
     created_at: string;
     updated_at: string;

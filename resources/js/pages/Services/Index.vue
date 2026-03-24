@@ -14,6 +14,7 @@ import ServicesFilter from '@/components/Service/ServicesFilter.vue';
 import Actions from '@/components/ui/table/Actions.vue';
 import ToggleStatus from '@/components/ui/toggle/ToggleStatus.vue';
 import TextLimiter from '@/components/TextLimiter.vue';
+import { convertFromMinutes } from '@/utils/time';
 
 export type ServiceFilterProps = {
   q?: string
@@ -107,9 +108,9 @@ const onPageChange = (event: any) => {
                   service.other_price_type || service.price_type || 'fixed'
                 }}
               </span>
-              <span v-if="Boolean(service.estimated_duration_minutes)" class="flex items-center gap-1">
-                <Clock class="size-4" /> {{ service.estimated_duration_minutes }} {{ service.estimated_duration_type ||
-                'minutes' }}
+              <span v-if="service.estimated_duration_minutes" class="flex items-center gap-1">
+                <Clock class="size-4" /> {{ convertFromMinutes(service.estimated_duration_minutes,
+                  service.estimated_duration_type) }} {{ service.estimated_duration_type }}
               </span>
             </div>
 
