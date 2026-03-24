@@ -55,6 +55,7 @@ class EloquentServiceRepository implements ServiceRepository
     $service->price_type = $data->price_type;
     $service->other_price_type = $data->other_price_type;
     $service->estimated_duration_minutes = $data->estimated_duration_minutes;
+    $service->estimated_duration_type = $data->estimated_duration_type;
     $service->is_active = $data->is_active;
 
     $service->save();

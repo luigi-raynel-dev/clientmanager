@@ -60,10 +60,7 @@ const confirmStatusChange = () => {
 </script>
 
 <template>
-  <div v-if="variant === 'switch'" class="flex items-center gap-2">
-    <ToggleSwitch :model-value="status" @click.prevent="confirmStatusChange" />
-    <span :class="status ? 'font-bold' : ''">{{ statusLabel || 'Active' }}</span>
-  </div>
+  <ToggleSwitch v-if="variant === 'switch'" :model-value="status" @click.prevent="confirmStatusChange" />
   <Button v-else v-tooltip="tooltip" type="button" :severity="status ? 'success' : 'danger'" variant="outlined"
     :icon="status ? 'pi pi-check-circle' : 'pi pi-ban'" text size="small" @click="confirmStatusChange" />
 </template>

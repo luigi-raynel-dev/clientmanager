@@ -45,6 +45,7 @@ const form = useForm({
   other_price_type: '',
   base_price: undefined,
   estimated_duration_minutes: undefined,
+  estimated_duration_type: 'hours',
   is_active: true,
 } as ServiceFormType)
 
