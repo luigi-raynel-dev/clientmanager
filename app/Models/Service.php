@@ -20,10 +20,14 @@ class Service extends Model
         'name',
         'description',
         'base_price',
-        'price_type',
-        'other_price_type',
+        'pricing_type_id',
         'estimated_duration_minutes',
         'estimated_duration_type',
         'is_active',
     ];
+
+    public function pricingType()
+    {
+        return $this->belongsTo(PricingType::class);
+    }
 }

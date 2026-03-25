@@ -105,7 +105,7 @@ const onPageChange = (event: any) => {
             <div class="flex w-full gap-6">
               <span>
                 $ {{ service.base_price || "---" }} / {{
-                  service.other_price_type || service.price_type || 'fixed'
+                  service.pricing_type?.name || 'fixed'
                 }}
               </span>
               <span v-if="service.estimated_duration_minutes" class="flex items-center gap-1">

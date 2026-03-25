@@ -23,12 +23,13 @@ class EloquentServiceRepository implements ServiceRepository
         $q->where('is_active', $filter->is_active);
       })
       ->orderBy($filter->order_by ?? 'created_at', $filter->order_direction ?? 'desc')
+      ->with('pricingType')
       ->paginate($filter->per_page ?? 10);
   }
 
   public function get(int $id): Service
   {
-    return Service::findOrFail($id);
+    return Service::with('pricingType')->findOrFail($id);
   }
 
   public function create(ServiceData $data): Service
@@ -37,8 +38,7 @@ class EloquentServiceRepository implements ServiceRepository
       'name' => $data->name,
       'description' => $data->description,
       'base_price' => $data->base_price,
-      'price_type' => $data->price_type,
-      'other_price_type' => $data->other_price_type,
+      'pricing_type_id' => $data->pricing_type_id,
       'estimated_duration_minutes' => $data->estimated_duration_minutes,
       'estimated_duration_type' => $data->estimated_duration_type,
       'is_active' => $data->is_active
@@ -52,8 +52,7 @@ class EloquentServiceRepository implements ServiceRepository
     $service->name = $data->name;
     $service->description = $data->description;
     $service->base_price = $data->base_price;
-    $service->price_type = $data->price_type;
-    $service->other_price_type = $data->other_price_type;
+    $service->pricing_type_id = $data->pricing_type_id;
     $service->estimated_duration_minutes = $data->estimated_duration_minutes;
     $service->estimated_duration_type = $data->estimated_duration_type;
     $service->is_active = $data->is_active;

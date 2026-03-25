@@ -16,10 +16,9 @@ it('edits a service', function () {
         name: fake()->name(),
         description: $service->description ?? null,
         base_price: $service->base_price ?? null,
-        price_type: $service->price_type ?? null,
+        pricing_type_id: $service->pricing_type_id ?? null,
         estimated_duration_minutes: $service->estimated_duration_minutes ?? null,
         estimated_duration_type: $service->estimated_duration_type ?? null,
-        other_price_type: $service->other_price_type ?? null,
         is_active: $service->is_active
     );
     $action = new EditService(new EloquentServiceRepository());

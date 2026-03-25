@@ -11,8 +11,7 @@ export type ServiceFormType = {
   name: string;
   description?: string;
   base_price?: number;
-  price_type?: string;
-  other_price_type?: string;
+  pricing_type_id?: number | null;
   estimated_duration_minutes?: number;
   estimated_duration_type: 'minutes' | 'hours' | 'days' | 'weeks' | 'months';
   is_active: boolean;
@@ -25,47 +24,6 @@ const props = defineProps<{
 }>()
 
 defineEmits(['submit', 'cancel'])
-
-const priceTypeOptions = [
-  { label: 'Fixed Price', value: 'fixed' },
-  { label: 'Per Unit', value: 'unit' },
-  { label: 'Per Hour', value: 'hourly' },
-  { label: 'Per Day', value: 'daily' }
-]
-
-const filteredPriceTypes = ref(priceTypeOptions)
-
-const searchPriceType = (event: any) => {
-  const query = event.query.toLowerCase()
-
-  filteredPriceTypes.value = priceTypeOptions.filter(option =>
-    option.label.toLowerCase().includes(query)
-  )
-}
-
-const handlePriceTypeChange = (value: any) => {
-  if (!value) {
-    props.form.price_type = undefined
-    props.form.other_price_type = undefined
-    return;
-  }
-
-  if (typeof value === 'object') {
-    props.form.price_type = value.value
-    props.form.other_price_type = undefined
-    return;
-  }
-
-  const found = priceTypeOptions.find(o => o.value === value)
-
-  if (found) {
-    props.form.price_type = found.value
-    props.form.other_price_type = undefined
-  } else {
-    props.form.price_type = undefined
-    props.form.other_price_type = value
-  }
-}
 
 const durationTypeOptions = [
   { label: 'Minutes', value: 'minutes' },
@@ -109,13 +67,7 @@ const durationTypeOptions = [
           <div class="flex flex-col gap-1 w-full">
             <label>Price Type</label>
 
-            <AutoComplete fluid dropdown :suggestions="filteredPriceTypes" optionLabel="label" :forceSelection="false"
-              @complete="searchPriceType" @update:modelValue="handlePriceTypeChange"
-              :modelValue="form.price_type ?? form.other_price_type" />
 
-            <small class="text-red-500">
-              {{ form.errors.price_type || form.errors.other_price_type }}
-            </small>
           </div>
         </div>
       </template>

@@ -52,8 +52,9 @@ class ServiceTest extends TestCase
             'name' => fake()->words(3, true),
             'description' => fake()->sentence(),
             'base_price' => fake()->randomFloat(2, 10, 100),
-            'price_type' => fake()->randomElement(['fixed', 'unit', 'hourly', 'daily']),
+            'pricing_type_id' => fake()->boolean() ? null : fake()->randomElement([1, 2, 3]),
             'estimated_duration_minutes' => fake()->numberBetween(1, 12),
+            'estimated_duration_type' => fake()->randomElement(['minutes', 'hours', 'days', 'weeks', 'months']),
             'is_active' => fake()->boolean(70),
         ];
 
@@ -75,7 +76,7 @@ class ServiceTest extends TestCase
             'name' => fake()->words(3, true),
             'description' => fake()->sentence(),
             'base_price' => fake()->randomFloat(2, 10, 100),
-            'price_type' => fake()->randomElement(['fixed', 'unit', 'hourly', 'daily']),
+            'pricing_type_id' => fake()->boolean() ? null : fake()->randomElement([1, 2, 3]),
             'estimated_duration_minutes' => fake()->numberBetween(1, 12),
             'is_active' => fake()->boolean(70),
         ];
@@ -98,7 +99,7 @@ class ServiceTest extends TestCase
             'name' => fake()->words(3, true),
             'description' => fake()->sentence(),
             'base_price' => fake()->randomFloat(2, 10, 100),
-            'price_type' => fake()->randomElement(['fixed', 'unit', 'hourly', 'daily']),
+            'pricing_type_id' => fake()->boolean() ? null : fake()->randomElement([1, 2, 3]),
             'estimated_duration_minutes' => fake()->numberBetween(1, 12),
             'estimated_duration_type' => fake()->randomElement(['minutes', 'hours', 'days', 'weeks', 'months']),
             'is_active' => fake()->boolean(70),
