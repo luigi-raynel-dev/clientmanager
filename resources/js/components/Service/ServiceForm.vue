@@ -3,9 +3,9 @@ import { Form, FormProps } from '@primevue/forms'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import { InertiaForm } from '@inertiajs/vue3'
-import { AutoComplete, Card, IconField, InputIcon, InputNumber, Message, Select, Textarea, ToggleSwitch } from 'primevue';
-import { ref } from 'vue'
+import { Card, IconField, InputIcon, InputNumber, Message, Select, Textarea, ToggleSwitch } from 'primevue';
 import OptionalField from '../ui/label/OptionalField.vue';
+import { PricingType } from '@/types/service';
 
 export type ServiceFormType = {
   name: string;
@@ -21,6 +21,7 @@ const props = defineProps<{
   form: InertiaForm<ServiceFormType>
   resolver: FormProps["resolver"]
   submitLabel: string
+  pricingTypes: PricingType[]
 }>()
 
 defineEmits(['submit', 'cancel'])
@@ -66,8 +67,9 @@ const durationTypeOptions = [
 
           <div class="flex flex-col gap-1 w-full">
             <label>Price Type</label>
-
-
+            <Select v-model="form.pricing_type_id" :options="[{ name: 'fixed', id: 0 }, ...pricingTypes]"
+              optionLabel="name" placeholder="Select a price type" optionValue="id" fluid
+              :invalid="Boolean(form.errors.pricing_type_id)" />
           </div>
         </div>
       </template>

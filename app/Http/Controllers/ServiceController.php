@@ -8,6 +8,7 @@ use App\Actions\Services\CreateService;
 use App\Actions\Services\DeleteService;
 use App\Actions\Services\GetService;
 use App\Actions\Services\ListServices;
+use App\Domain\PricingTypes\Repositories\PricingTypeRepository;
 use App\DTO\Service\ServiceData;
 use App\DTO\Service\ServiceFilter;
 use App\Http\Requests\Service\ChangeServiceStatusRequest;
@@ -42,6 +43,7 @@ class ServiceController extends Controller
 
         return Inertia::render('Services/Edit', [
             'service' => $service,
+            'pricingTypes' => app()->make(PricingTypeRepository::class)->list(),
         ]);
     }
 

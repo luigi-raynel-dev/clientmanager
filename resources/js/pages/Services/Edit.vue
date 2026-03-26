@@ -8,11 +8,12 @@ import { ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue';
 import ServiceForm from '@/components/Service/ServiceForm.vue';
-import { Service } from '@/types/service';
+import { PricingType, Service } from '@/types/service';
 import { convertFromMinutes, convertToMinutes } from '@/utils/time';
 
 const props = defineProps<{
   service: Service
+  pricingTypes: PricingType[]
 }>()
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -41,15 +42,14 @@ const serviceSchema = z.object({
 
 const resolver = ref(zodResolver(serviceSchema))
 
-console.log(props.service)
-
 // Inertia form
 const form = useForm({
   ...props.service,
+  pricing_type_id: props.service.pricing_type_id ?? 0,
   base_price: Number(props.service.base_price),
   estimated_duration_minutes: convertFromMinutes(Number(props.service.estimated_duration_minutes), props.service.estimated_duration_type),
   is_active: Boolean(props.service.is_active),
-})
+} as Service)
 
 const submit = () => {
   const result = serviceSchema.safeParse(form.data())
@@ -68,6 +68,8 @@ const submit = () => {
   if (form.estimated_duration_minutes) {
     form.estimated_duration_minutes = convertToMinutes(form.estimated_duration_minutes, form.estimated_duration_type)
   }
+
+  if (form.pricing_type_id === 0) form.pricing_type_id = null
 
   form.put(`/services/${props.service.id}`,
     {
@@ -90,8 +92,8 @@ const submit = () => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 my-6">
-      <ServiceForm :form="form" :resolver="resolver" submit-label="Update Service" submit-icon="pi pi-user-edit"
-        @submit="submit" @cancel="$inertia.visit(index().url)" />
+      <ServiceForm :pricing-types="pricingTypes" :form="form" :resolver="resolver" submit-label="Update Service"
+        submit-icon="pi pi-user-edit" @submit="submit" @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>

@@ -10,7 +10,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware(['admin'])->group(function () {
         Route::get('/services/create', function () {
-            return Inertia::render('Services/Create');
+            return Inertia::render('Services/Create', [
+                'pricingTypes' => app()->make(\App\Domain\PricingTypes\Repositories\PricingTypeRepository::class)->list(),
+            ]);
         })
             ->name('services.create');
 

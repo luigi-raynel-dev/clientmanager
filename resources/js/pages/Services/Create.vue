@@ -9,8 +9,11 @@ import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue';
 import ServiceForm, { ServiceFormType } from '@/components/Service/ServiceForm.vue';
 import { convertToMinutes } from '@/utils/time';
+import { PricingType } from '@/types/service';
 
-defineProps<{}>()
+const props = defineProps<{
+  pricingTypes: PricingType[]
+}>()
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -42,7 +45,7 @@ const resolver = ref(zodResolver(serviceSchema))
 const form = useForm({
   name: '',
   description: '',
-  pricing_type_id: null,
+  pricing_type_id: 0,
   base_price: undefined,
   estimated_duration_minutes: undefined,
   estimated_duration_type: 'hours',
@@ -67,6 +70,8 @@ const submit = () => {
     form.estimated_duration_minutes = convertToMinutes(form.estimated_duration_minutes, form.estimated_duration_type)
   }
 
+  if (form.pricing_type_id === 0) form.pricing_type_id = null
+
   form.post('/services',
     {
       onSuccess: () => {
@@ -88,8 +93,8 @@ const submit = () => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 my-6">
-      <ServiceForm :form="form" :resolver="resolver" showPassword submit-label="Create Service" @submit="submit"
-        @cancel="$inertia.visit(index().url)" />
+      <ServiceForm :pricingTypes="props.pricingTypes" :form="form" :resolver="resolver" showPassword
+        submit-label="Create Service" @submit="submit" @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>
