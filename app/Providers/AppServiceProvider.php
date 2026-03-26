@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Domain\Clients\Repositories\ClientRepository;
+use App\Domain\PricingTypes\Repositories\PricingTypeRepository;
 use App\Domain\Services\Repositories\ServiceRepository;
 use App\Domain\Users\Repositories\UserRepository;
 use App\Infrastructure\Persistence\Eloquent\EloquentClientRepository;
+use App\Infrastructure\Persistence\Eloquent\EloquentPricingTypeRepository;
 use App\Infrastructure\Persistence\Eloquent\EloquentServiceRepository;
 use App\Infrastructure\Persistence\Eloquent\EloquentUserRepository;
 use Carbon\CarbonImmutable;
@@ -33,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ServiceRepository::class,
             EloquentServiceRepository::class
+        );
+        $this->app->bind(
+            PricingTypeRepository::class,
+            EloquentPricingTypeRepository::class
         );
     }
 
