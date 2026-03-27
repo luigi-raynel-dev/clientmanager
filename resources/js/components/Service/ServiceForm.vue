@@ -3,9 +3,11 @@ import { Form, FormProps } from '@primevue/forms'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import { InertiaForm } from '@inertiajs/vue3'
-import { Card, IconField, InputIcon, InputNumber, Message, Select, Textarea, ToggleSwitch } from 'primevue';
+import { Card, IconField, InputGroup, InputGroupAddon, InputIcon, InputNumber, Message, Select, Textarea, ToggleSwitch } from 'primevue';
 import OptionalField from '../ui/label/OptionalField.vue';
 import { PricingType } from '@/types/service';
+import { ref } from 'vue';
+import NewPrincingType from '../PricingType/NewPrincingType.vue';
 
 export type ServiceFormType = {
   name: string;
@@ -33,6 +35,9 @@ const durationTypeOptions = [
   { label: 'Weeks', value: 'weeks' },
   { label: 'Months', value: 'months' }
 ]
+
+const openNewPricingType = ref(false)
+
 </script>
 
 <template>
@@ -67,9 +72,19 @@ const durationTypeOptions = [
 
           <div class="flex flex-col gap-1 w-full">
             <label>Price Type</label>
-            <Select v-model="form.pricing_type_id" :options="[{ name: 'fixed', id: 0 }, ...pricingTypes]"
-              optionLabel="name" placeholder="Select a price type" optionValue="id" fluid
-              :invalid="Boolean(form.errors.pricing_type_id)" />
+            <InputGroup>
+              <Select v-model="form.pricing_type_id" :options="[{ name: 'fixed', id: 0 }, ...pricingTypes]"
+                optionLabel="name" placeholder="Select a price type" optionValue="id" fluid
+                :invalid="Boolean(form.errors.pricing_type_id)" />
+              <InputGroupAddon>
+                <Button severity="secondary" icon="pi pi-plus" aria-label="Add" tooltip="Add Price Type"
+                  @click="openNewPricingType = true" />
+              </InputGroupAddon>
+            </InputGroup>
+            <Message v-if="form.errors.pricing_type_id" severity="error" size="small" variant="simple">
+              {{ form.errors.pricing_type_id }}
+            </Message>
+            <NewPrincingType v-model:visible="openNewPricingType" @cancel="openNewPricingType = false" />
           </div>
         </div>
       </template>
