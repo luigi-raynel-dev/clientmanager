@@ -10,7 +10,6 @@ use Tests\TestCase;
 uses(TestCase::class, RefreshDatabase::class);
 
 it('creates a pricing type', function () {
-
     $data = new PricingTypeData(
         name: fake()->word()
     );
