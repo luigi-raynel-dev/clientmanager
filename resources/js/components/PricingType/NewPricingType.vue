@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { store } from '@/routes/pricingTypes';
+import { PricingType } from '@/types/service';
 import { useForm } from '@inertiajs/vue3';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { Button, Dialog, InputText, Message } from 'primevue'
@@ -10,7 +11,7 @@ const props = defineProps<{
   visible: boolean
 }>()
 
-const emit = defineEmits(['update:visible', 'cancel'])
+const emit = defineEmits(['update:visible', 'getNewPricingType'])
 
 const close = () => {
   emit('update:visible', false)
@@ -39,7 +40,9 @@ const submit = () => {
   }
 
   form.post(store().url, {
-    onSuccess: () => {
+    onSuccess: (response) => {
+      // console.log(response.props.flash?.info)
+      emit('getNewPricingType', response.props.flash?.info)
       close()
     },
     onError: (errors) => {

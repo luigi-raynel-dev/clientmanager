@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\PricingTypes\CreatePricingType;
 use App\DTO\PricingType\PricingTypeData;
 use App\Http\Requests\PricingType\StorePricingTypeRequest;
+use Illuminate\Support\Facades\Redirect;
 
 class PricingTypeController extends Controller
 {
@@ -21,9 +22,6 @@ class PricingTypeController extends Controller
 
         $pricingType = $action->execute($clientData);
 
-        return response()->json([
-            'message' => 'Pricing type created successfully',
-            'pricing_type' => $pricingType
-        ]);
+        return redirect()->back()->with('info', (string) $pricingType->id);
     }
 }

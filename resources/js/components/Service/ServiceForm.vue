@@ -7,7 +7,7 @@ import { Card, IconField, InputGroup, InputGroupAddon, InputIcon, InputNumber, M
 import OptionalField from '../ui/label/OptionalField.vue';
 import { PricingType } from '@/types/service';
 import { ref } from 'vue';
-import NewPrincingType from '../PricingType/NewPrincingType.vue';
+import NewPricingType from '../PricingType/NewPricingType.vue';
 
 export type ServiceFormType = {
   name: string;
@@ -84,7 +84,8 @@ const openNewPricingType = ref(false)
             <Message v-if="form.errors.pricing_type_id" severity="error" size="small" variant="simple">
               {{ form.errors.pricing_type_id }}
             </Message>
-            <NewPrincingType v-model:visible="openNewPricingType" @cancel="openNewPricingType = false" />
+            <NewPricingType v-model:visible="openNewPricingType"
+              @get-new-pricing-type="$event => { form.pricing_type_id = $event }" />
           </div>
         </div>
       </template>
