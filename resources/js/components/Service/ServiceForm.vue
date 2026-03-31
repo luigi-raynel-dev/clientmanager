@@ -85,7 +85,7 @@ const openNewPricingType = ref(false)
               {{ form.errors.pricing_type_id }}
             </Message>
             <NewPricingType v-model:visible="openNewPricingType"
-              @get-new-pricing-type="$event => { form.pricing_type_id = $event }" />
+              @get-new-pricing-type="(newType) => { form.pricing_type_id = newType.id }" />
           </div>
         </div>
       </template>

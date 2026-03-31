@@ -41,7 +41,6 @@ const submit = () => {
 
   form.post(store().url, {
     onSuccess: (response) => {
-      // console.log(response.props.flash?.info)
       emit('getNewPricingType', response.props.flash?.info)
       close()
     },

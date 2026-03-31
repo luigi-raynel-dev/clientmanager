@@ -5,7 +5,7 @@ export interface FlashProps {
     success?: string;
     error?: string;
     warning?: string;
-    info?: string;
+    info?: Record<string, any>;
 }
 
 declare module '@inertiajs/core' {

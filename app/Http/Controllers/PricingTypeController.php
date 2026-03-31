@@ -22,6 +22,6 @@ class PricingTypeController extends Controller
 
         $pricingType = $action->execute($clientData);
 
-        return redirect()->back()->with('info', (string) $pricingType->id);
+        return redirect()->back()->with('info', $pricingType->toArray());
     }
 }
