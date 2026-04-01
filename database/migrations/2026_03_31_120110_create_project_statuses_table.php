@@ -65,6 +65,16 @@ return new class extends Migration
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'title' => 'Cancelled',
+                'description' => 'The project has been cancelled.',
+                'color' => '#f03535',
+                'is_default' => false,
+                'is_final' => false,
+                'order' => 4,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 
