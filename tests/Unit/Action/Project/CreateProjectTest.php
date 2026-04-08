@@ -58,6 +58,7 @@ it('creates a project with relationships', function () {
     'priority' => $data->priority,
     'start_date' => $data->start_date,
     'end_date' => $data->end_date,
+    'discount_percentage' => $data->discount_percentage,
   ]);
 
   // Related (pivot tables)
