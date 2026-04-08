@@ -10,7 +10,7 @@ use App\DTO\Project\ProjectData;
 use App\Models\Project;
 use Illuminate\Support\Facades\DB;
 
-class CreateProjectAction
+class CreateProject
 {
   public function __construct(
     private ProjectRepository $projectRepository,

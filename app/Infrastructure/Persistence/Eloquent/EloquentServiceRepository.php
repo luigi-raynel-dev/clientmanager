@@ -7,6 +7,7 @@ use App\Domain\Services\Repositories\ServiceRepository;
 use App\DTO\Service\ServiceData;
 use App\DTO\Service\ServiceFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class EloquentServiceRepository implements ServiceRepository
 {
@@ -30,6 +31,11 @@ class EloquentServiceRepository implements ServiceRepository
   public function get(int $id): Service
   {
     return Service::with('pricingType')->findOrFail($id);
+  }
+
+  public function findByIds(array $ids): Collection
+  {
+    return Service::whereIn('id', $ids)->get();
   }
 
   public function create(ServiceData $data): Service

@@ -7,6 +7,7 @@ use App\DTO\User\UserData;
 use App\DTO\User\UserFilter;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
 
 class EloquentUserRepository implements UserRepository
@@ -36,6 +37,11 @@ class EloquentUserRepository implements UserRepository
   public function get(int $id): User
   {
     return User::findOrFail($id);
+  }
+
+  public function findByIds(array $ids): Collection
+  {
+    return User::whereIn('id', $ids)->get();
   }
 
   public function create(UserData $data): User

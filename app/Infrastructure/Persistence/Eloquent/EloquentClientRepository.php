@@ -7,6 +7,7 @@ use App\Models\Client;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Domain\Clients\Repositories\ClientRepository;
 use App\DTO\Client\ClientData;
+use Illuminate\Support\Collection;
 
 class EloquentClientRepository implements ClientRepository
 {
@@ -26,6 +27,11 @@ class EloquentClientRepository implements ClientRepository
   public function get(int $id): Client
   {
     return Client::findOrFail($id);
+  }
+
+  public function findByIds(array $ids): Collection
+  {
+    return Client::whereIn('id', $ids)->get();
   }
 
   public function create(ClientData $data): Client
