@@ -12,3 +12,4 @@ require __DIR__ . '/user.php';
 require __DIR__ . '/client.php';
 require __DIR__ . '/service.php';
 require __DIR__ . '/pricingType.php';
+require __DIR__ . '/project.php';
