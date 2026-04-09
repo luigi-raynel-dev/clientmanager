@@ -7,6 +7,8 @@ import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 import ListPageHeading from '@/components/ListPageHeading.vue';
 import SearchField from '@/components/ui/input/SearchField.vue';
+import { Card } from 'primevue';
+import { Project } from '@/types/project';
 
 export type ProjectFilterProps = {
   q?: string
@@ -18,7 +20,7 @@ export type ProjectFilterProps = {
 }
 
 const props = defineProps<{
-  projects: DataPaginator<any[]>,
+  projects: DataPaginator<Project[]>,
   filters?: ProjectFilterProps
 }>()
 
@@ -78,6 +80,17 @@ const onPageChange = (event: any) => {
         <p v-else class="text-neutral-500">
           There are {{ props.projects.total }} projects.
         </p>
+        <Card v-for="project in props.projects.data" :key="project.id" class="w-full">
+          <template #title>
+            {{ project.name }}
+          </template>
+          <template #content v-if="project.description">
+            <TextLimiter :text="project.description" :maxLength="500" />
+          </template>
+        </Card>
+
+        <Paginator :rows="props.projects.per_page" :totalRecords="props.projects.total" :first="first"
+          @page="onPageChange" :rowsPerPageOptions="[5, 10, 25, 50]" />
       </div>
     </div>
   </AppLayout>

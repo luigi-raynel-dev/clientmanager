@@ -2,16 +2,16 @@
 
 namespace Database\Seeders;
 
-use App\Models\Service;
+use App\Models\Project;
 use Illuminate\Database\Seeder;
 
-class ServiceSeeder extends Seeder
+class ProjectSeeder extends Seeder
 {
   /**
    * Seed the admin user into the database.
    */
   public function run(): void
   {
-    Service::factory(20)->create();
+    Project::factory(10)->create();
   }
 }

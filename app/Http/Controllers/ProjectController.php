@@ -3,11 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Projects\CreateProject;
+use App\Actions\Projects\ListProjects;
 use App\DTO\Project\ProjectData;
+use App\DTO\Project\ProjectFilter;
 use App\Http\Requests\Project\StoreProjectRequest;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
+    public function index(ListProjects $action)
+    {
+        $filter = new ProjectFilter(
+            search: request('q'),
+            priority: request('priority'),
+            status_id: request('status_id'),
+            order_by: request('order_by'),
+            order_direction: request('order_direction'),
+            per_page: request('per_page'),
+            page: request('page'),
+        );
+
+        $projects = $action->execute($filter);
+
+        return Inertia::render('Projects/Index', [
+            ...compact('projects'),
+            'filters' => request()->only(['q', 'priority', 'status_id', 'order_by', 'order_direction', 'per_page', 'page']),
+        ]);
+    }
+
     public function store(
         StoreProjectRequest $request,
         CreateProject $action

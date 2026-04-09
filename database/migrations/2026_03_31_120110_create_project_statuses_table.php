@@ -59,7 +59,7 @@ return new class extends Migration
                 'title' => 'Cancelled',
                 'description' => 'The project has been cancelled.',
                 'color' => '#f03535',
-                'is_default' => false,
+                'is_default' => true,
                 'is_final' => false,
                 'order' => 4,
                 'created_at' => now(),

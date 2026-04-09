@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { Users, LayoutGrid, IdCard, Wrench } from 'lucide-vue-next';
+import { Users, LayoutGrid, IdCard, Wrench, BriefcaseBusiness } from 'lucide-vue-next';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
@@ -19,12 +19,18 @@ import AppLogo from './AppLogo.vue';
 import users from '@/routes/users';
 import clients from '@/routes/clients';
 import services from '@/routes/services';
+import projects from '@/routes/projects';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: home(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Projects',
+        href: projects.index(),
+        icon: BriefcaseBusiness,
     },
     {
         title: 'Services',
