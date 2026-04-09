@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce'
 import { ref, watch } from 'vue';
 import ListPageHeading from '@/components/ListPageHeading.vue';
 import SearchField from '@/components/ui/input/SearchField.vue';
-import { Card } from 'primevue';
+import { Card, Paginator } from 'primevue';
 import { Project } from '@/types/project';
 
 export type ProjectFilterProps = {
@@ -80,9 +80,15 @@ const onPageChange = (event: any) => {
         <p v-else class="text-neutral-500">
           There are {{ props.projects.total }} projects.
         </p>
-        <Card v-for="project in props.projects.data" :key="project.id" class="w-full">
+        <Card v-for="project in props.projects.data" :key="project.id" class="w-full"
+          :style="{ borderLeft: `5px solid ${project.status?.color || 'transparent'}` }">
           <template #title>
-            {{ project.name }}
+            <div class="flex items-center gap-x-2">
+              <div v-if="project.status" v-tooltip.focus.top="project.status.title"
+                class="border border-black w-3 h-3 rounded-lg" :style="{ backgroundColor: project.status.color }">
+              </div>
+              {{ project.name }}
+            </div>
           </template>
           <template #content v-if="project.description">
             <TextLimiter :text="project.description" :maxLength="500" />

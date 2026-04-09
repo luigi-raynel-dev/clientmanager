@@ -35,7 +35,7 @@ class EloquentProjectRepository implements ProjectRepository
         $q->orderBy($filter->order_by, $filter->order_direction ?? "asc");
       })
       ->with(['services', 'services.pricingType', 'status'])
-      ->paginate($filter->per_page ?? 20);
+      ->paginate($filter->per_page ?? 25);
   }
 
   public function create(ProjectData $data): Project
