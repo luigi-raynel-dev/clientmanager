@@ -93,8 +93,8 @@ const submit = () => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 my-6">
-      <ServiceForm :pricingTypes="props.pricingTypes" :form="form" :resolver="resolver" showPassword
-        submit-label="Create Service" @submit="submit" @cancel="$inertia.visit(index().url)" />
+      <ServiceForm :pricingTypes="props.pricingTypes" :form="form" :resolver="resolver" submit-label="Create Service"
+        @submit="submit" @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>

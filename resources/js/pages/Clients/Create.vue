@@ -73,8 +73,8 @@ const submit = () => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 my-6">
-      <ClientForm :form="form" :resolver="resolver" showPassword submit-label="Create Client"
-        submit-icon="pi pi-user-plus" @submit="submit" @cancel="$inertia.visit(index().url)" />
+      <ClientForm :form="form" :resolver="resolver" submit-label="Create Client" submit-icon="pi pi-user-plus"
+        @submit="submit" @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>

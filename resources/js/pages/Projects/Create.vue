@@ -7,6 +7,7 @@ import z from 'zod';
 import { ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue';
+import ProjectForm, { ProjectFormType } from '@/components/Project/ProjectForm.vue';
 
 const props = defineProps<{}>()
 
@@ -27,11 +28,6 @@ const toast = useToast();
 const projectSchema = z.object({
   name: z.string().min(3),
   description: z.string().nullable().nullish(),
-  base_price: z.number().nullable().nullish(),
-  pricing_type_id: z.number().nullable().nullish(),
-  estimated_duration_minutes: z.number().nullable().nullish(),
-  estimated_duration_type: z.enum(['minutes', 'hours', 'days', 'weeks', 'months']),
-  is_active: z.boolean(),
 })
 
 const resolver = ref(zodResolver(projectSchema))
@@ -40,7 +36,7 @@ const resolver = ref(zodResolver(projectSchema))
 const form = useForm({
   name: '',
   description: '',
-})
+} as ProjectFormType)
 
 const submit = () => {
   const result = projectSchema.safeParse(form.data())
@@ -76,8 +72,9 @@ const submit = () => {
   <Head title="Create Projects" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
-    <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 my-6">
-
+    <div class="w-full flex h-full flex-1 flex-col p-4 my-6">
+      <ProjectForm :form="form" :resolver="resolver" submit-label="Create Service" @submit="submit"
+        @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>
