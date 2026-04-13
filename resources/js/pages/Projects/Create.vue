@@ -8,8 +8,12 @@ import { ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue';
 import ProjectForm, { ProjectFormType } from '@/components/Project/ProjectForm.vue';
+import { ProjectStatus } from '@/types/project';
 
-const props = defineProps<{}>()
+const props = defineProps<{
+  name: string;
+  statuses: ProjectStatus[]
+}>()
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -28,14 +32,17 @@ const toast = useToast();
 const projectSchema = z.object({
   name: z.string().min(3),
   description: z.string().nullable().nullish(),
+  priority: z.enum(['Low', 'Medium', 'High']).default('Medium'),
 })
 
 const resolver = ref(zodResolver(projectSchema))
 
 // Inertia form
 const form = useForm({
-  name: '',
+  name: props.name,
   description: '',
+  priority: 'Medium',
+  status_id: props.statuses.find(({ is_default }) => is_default)?.id ?? null,
 } as ProjectFormType)
 
 const submit = () => {
@@ -73,7 +80,7 @@ const submit = () => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="w-full flex h-full flex-1 flex-col p-4 my-6">
-      <ProjectForm :form="form" :resolver="resolver" submit-label="Create Service" @submit="submit"
+      <ProjectForm :form="form" :statuses="statuses" :resolver="resolver" submit-label="Create Service" @submit="submit"
         @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>

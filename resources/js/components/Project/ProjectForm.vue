@@ -3,16 +3,20 @@ import { Form, FormProps } from '@primevue/forms'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import { InertiaForm } from '@inertiajs/vue3'
-import { Card, Textarea } from 'primevue';
+import { Card, Select, SelectButton, Textarea } from 'primevue';
 import OptionalField from '../ui/label/OptionalField.vue';
+import { ProjectStatus } from '@/types/project';
 
 export type ProjectFormType = {
   name: string;
   description?: string;
+  priority: 'Low' | 'Medium' | 'High';
+  status_id?: number | null
 };
 
 const props = defineProps<{
   form: InertiaForm<ProjectFormType>
+  statuses: ProjectStatus[]
   resolver: FormProps["resolver"]
   submitLabel: string
 }>()
@@ -64,6 +68,46 @@ defineEmits(['submit', 'cancel'])
       <Card class="h-max border">
         <template #content>
           <div class="flex flex-col gap-4">
+            <div class="flex flex-col">
+              <h2 class="text-xl font-bold mb-2">Priority</h2>
+              <SelectButton fluid v-model="form.priority" :options="[
+                { value: 'Low', icon: 'pi pi-flag' },
+                { value: 'Medium', icon: 'pi pi-flag' },
+                { value: 'High', icon: 'pi pi-flag-fill' }
+              ]" optionLabel="value" dataKey="value" aria-labelledby="custom">
+                <template #option="slotProps">
+                  <i :class="slotProps.option.icon"
+                    :style="{ color: slotProps.option.value === 'Low' ? '#3b82f6' : slotProps.option.value === 'Medium' ? '#f59e0b' : '#ef4444' }"></i>
+                </template>
+              </SelectButton>
+            </div>
+            <div class="flex flex-col">
+              <h2 class="text-xl font-bold mb-2">Status</h2>
+              <Select v-model="form.status_id" :options="statuses" optionLabel="title" placeholder="Select a status"
+                optionValue="id" fluid>
+                <template #value="slotProps">
+                  <div v-if="statuses.find(s => s.id === slotProps.value)" class="flex items-center gap-2">
+                    <div class="border border-black w-3 h-3 rounded-lg"
+                      :style="{ backgroundColor: statuses.find(s => s.id === slotProps.value)!.color }">
+                    </div>
+                    <div>{{statuses.find(s => s.id === slotProps.value)!.title}}</div>
+                  </div>
+                  <span v-else>
+                    {{ slotProps.placeholder }}
+                  </span>
+                </template>
+                <template #option="slotProps">
+                  <div class="flex items-center gap-2">
+                    <div class="border border-black w-3 h-3 rounded-lg"
+                      :style="{ backgroundColor: slotProps.option.color }">
+                    </div>
+                    <div>
+                      {{ slotProps.option.title }}
+                    </div>
+                  </div>
+                </template>
+              </Select>
+            </div>
             <div class="flex flex-col">
               <h2 class="text-xl font-bold mb-2">Clients</h2>
               <p class="text-gray-600 mb-4">You can assign clients to this project after creating it.</p>
