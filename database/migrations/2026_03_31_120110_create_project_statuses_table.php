@@ -28,7 +28,7 @@ return new class extends Migration
             [
                 'title' => 'Not Started',
                 'description' => 'The project has not been started yet.',
-                'color' => '#FF0000',
+                'color' => '#FFFFFF',
                 'is_default' => true,
                 'is_final' => false,
                 'order' => 1,

@@ -43,6 +43,8 @@ const form = useForm({
   description: '',
   priority: 'Medium',
   status_id: props.statuses.find(({ is_default }) => is_default)?.id ?? null,
+  start_date: null,
+  end_date: null,
 } as ProjectFormType)
 
 const submit = () => {

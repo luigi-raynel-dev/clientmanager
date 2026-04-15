@@ -11,7 +11,9 @@ export type ProjectFormType = {
   name: string;
   description?: string;
   priority: 'Low' | 'Medium' | 'High';
-  status_id?: number | null
+  status_id?: number | null;
+  start_date?: string | null;
+  end_date?: string | null;
 };
 
 const props = defineProps<{
@@ -74,7 +76,7 @@ defineEmits(['submit', 'cancel'])
                 { value: 'Low', icon: 'pi pi-flag' },
                 { value: 'Medium', icon: 'pi pi-flag' },
                 { value: 'High', icon: 'pi pi-flag-fill' }
-              ]" optionLabel="value" dataKey="value" aria-labelledby="custom">
+              ]" optionLabel="value" optionValue="value" dataKey="value" aria-labelledby="custom">
                 <template #option="slotProps">
                   <i :class="slotProps.option.icon"
                     :style="{ color: slotProps.option.value === 'Low' ? '#3b82f6' : slotProps.option.value === 'Medium' ? '#f59e0b' : '#ef4444' }"></i>
@@ -107,6 +109,20 @@ defineEmits(['submit', 'cancel'])
                   </div>
                 </template>
               </Select>
+            </div>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="flex flex-col gap-1">
+                <label>Start Date
+                  <OptionalField />
+                </label>
+                <input type="date" class="p-inputtext w-full" v-model="form.start_date" />
+              </div>
+              <div class="flex flex-col gap-1">
+                <label>End Date
+                  <OptionalField />
+                </label>
+                <input type="date" class="p-inputtext w-full" v-model="form.end_date" />
+              </div>
             </div>
             <div class="flex flex-col">
               <h2 class="text-xl font-bold mb-2">Clients</h2>
