@@ -24,6 +24,11 @@ class EloquentClientRepository implements ClientRepository
       ->paginate($filter->per_page ?? 10);
   }
 
+  public function list(): Collection
+  {
+    return Client::all();
+  }
+
   public function get(int $id): Client
   {
     return Client::findOrFail($id);

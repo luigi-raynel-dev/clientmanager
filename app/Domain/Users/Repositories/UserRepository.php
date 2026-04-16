@@ -12,6 +12,8 @@ interface UserRepository
 {
   public function search(UserFilter $filter): LengthAwarePaginator;
 
+  public function list(): Collection;
+
   public function get(int $id): User;
 
   public function findByIds(array $ids): Collection;

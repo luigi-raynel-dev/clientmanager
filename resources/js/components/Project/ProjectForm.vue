@@ -5,9 +5,11 @@ import Button from 'primevue/button'
 import { InertiaForm } from '@inertiajs/vue3'
 import { Card, Select, SelectButton, Textarea } from 'primevue';
 import OptionalField from '../ui/label/OptionalField.vue';
+import ClientMultiSelect from '../Client/ClientMultiSelect.vue';
 import ProfessionalMultiSelect from './ProfessionalMultiSelect.vue';
 import type { User } from '@/types/auth';
 import { ProjectStatus } from '@/types/project';
+import { Client } from '@/types/client';
 
 export type ProjectFormType = {
   name: string;
@@ -17,12 +19,14 @@ export type ProjectFormType = {
   start_date?: string | null;
   end_date?: string | null;
   professional_ids: number[];
+  client_ids: number[];
 };
 
 const props = defineProps<{
   form: InertiaForm<ProjectFormType>
   statuses: ProjectStatus[]
-  professionals?: User[]
+  professionals: User[]
+  clients: Client[]
   resolver: FormProps["resolver"]
   submitLabel: string
 }>()
@@ -62,16 +66,10 @@ defineEmits(['submit', 'cancel'])
         </Card>
 
       </div>
-
-      <!-- Actions -->
-      <div class="flex justify-end my-4">
-        <Button label="Cancel" class="p-button-text mr-2" @click="$emit('cancel')" />
-        <Button :label="submitLabel" :loading="form.processing" type="submit" />
-      </div>
     </div>
 
-    <div class="w-full md:w-1/3 md:self-start md:sticky md:top-4">
-      <Card class="h-max border">
+    <div class="w-full md:w-1/3 md:self-start">
+      <Card>
         <template #content>
           <div class="flex flex-col gap-4">
             <div class="flex flex-col">
@@ -128,19 +126,26 @@ defineEmits(['submit', 'cancel'])
                 <input type="date" class="p-inputtext w-full" v-model="form.end_date" />
               </div>
             </div>
-            <div class="flex flex-col">
-              <h2 class="text-xl font-bold mb-2">Clients</h2>
-              <p class="text-gray-600 mb-4">You can assign clients to this project after creating it.</p>
+            <div class="flex flex-col gap-2">
+              <h2 class="text-xl font-bold">Clients</h2>
+              <p class="text-gray-600">You can assign clients to follow this project.</p>
+              <ClientMultiSelect v-model="form.client_ids" :clients="props.clients" :error="form.errors.client_ids" />
             </div>
-            <div class="flex flex-col gap-4">
-              <h2 class="text-xl font-bold mb-2">Professionals</h2>
-              <p class="text-gray-600">Search and assign professionals to the project.</p>
-              <ProfessionalMultiSelect v-model="form.professional_ids" :professionals="props.professionals ?? []"
-                placeholder="Search users by name" :error="form.errors.professional_ids" />
+            <div class="flex flex-col gap-2">
+              <h2 class="text-xl font-bold">Professionals</h2>
+              <p class="text-gray-600">You can assign professionals to work in this project.</p>
+              <ProfessionalMultiSelect v-model="form.professional_ids" :professionals="props.professionals"
+                :error="form.errors.professional_ids" />
             </div>
           </div>
         </template>
       </Card>
+
+      <!-- Actions -->
+      <div class="flex justify-end my-4">
+        <Button label="Cancel" class="p-button-text mr-2" @click="$emit('cancel')" />
+        <Button :label="submitLabel" :loading="form.processing" type="submit" />
+      </div>
     </div>
 
   </Form>

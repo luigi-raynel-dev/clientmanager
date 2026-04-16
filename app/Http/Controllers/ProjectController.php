@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Clients\ListClients;
 use App\Actions\Projects\CreateProject;
 use App\Actions\Projects\ListProjects;
+use App\Actions\Users\ListUsers;
 use App\DTO\Project\ProjectData;
 use App\DTO\Project\ProjectFilter;
 use App\Http\Requests\Project\StoreProjectRequest;
+use App\Models\Project;
+use App\Models\ProjectStatus;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -28,6 +32,16 @@ class ProjectController extends Controller
         return Inertia::render('Projects/Index', [
             ...compact('projects'),
             'filters' => request()->only(['q', 'priority', 'status_id', 'order_by', 'order_direction', 'per_page', 'page']),
+        ]);
+    }
+
+    public function create(ListUsers $listUsers, ListClients $listClients)
+    {
+        return Inertia::render('Projects/Create', [
+            'name' => "Project #" . (Project::count() + 1),
+            'statuses' => ProjectStatus::orderBy('order')->get(),
+            'clients' => $listClients->execute(),
+            'professionals' => $listUsers->execute(),
         ]);
     }
 

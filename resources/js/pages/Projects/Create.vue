@@ -10,11 +10,13 @@ import { useToast } from 'primevue';
 import ProjectForm, { ProjectFormType } from '@/components/Project/ProjectForm.vue';
 import type { User } from '@/types/auth'
 import { ProjectStatus } from '@/types/project';
+import { Client } from '@/types/client';
 
 const props = defineProps<{
   name: string;
   statuses: ProjectStatus[]
-  professionals?: User[]
+  professionals: User[]
+  clients: Client[]
 }>()
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -49,6 +51,7 @@ const form = useForm({
   start_date: null,
   end_date: null,
   professional_ids: [],
+  client_ids: [],
 } as ProjectFormType)
 
 const submit = () => {
@@ -86,8 +89,8 @@ const submit = () => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="w-full flex h-full flex-1 flex-col p-4 my-6">
-      <ProjectForm :form="form" :statuses="statuses" :professionals="props.professionals ?? []" :resolver="resolver"
-        submit-label="Create Service" @submit="submit" @cancel="$inertia.visit(index().url)" />
+      <ProjectForm :form="form" :statuses="statuses" :professionals="props.professionals" :clients="props.clients"
+        :resolver="resolver" submit-label="Create Service" @submit="submit" @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>

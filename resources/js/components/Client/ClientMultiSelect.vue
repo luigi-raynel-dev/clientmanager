@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import MultiSelect from 'primevue/multiselect'
-import type { User } from '@/types/auth'
 import { computed } from 'vue'
+import { Client } from '@/types/client';
 
 const props = defineProps<{
   modelValue: number[]
-  professionals: User[]
+  clients: Client[]
   label?: string
   placeholder?: string
   error?: string
@@ -21,9 +21,9 @@ const selectedValues = computed({
 
 <template>
   <div class="flex flex-col">
-    <MultiSelect v-model="selectedValues" :options="professionals" optionLabel="name" optionValue="id"
-      :placeholder="placeholder ?? 'Search and select professionals'" filter filterPlaceholder="Search professionals"
-      display="chip" showClear panelStyle="min-width: 18rem" class="w-full" />
+    <MultiSelect v-model="selectedValues" :options="clients" optionLabel="name" optionValue="id"
+      :placeholder="placeholder ?? 'Search and select clients'" filter filterPlaceholder="Search clients" display="chip"
+      showClear panelStyle="min-width: 18rem" class="w-full" />
 
     <small v-if="error" class="text-red-500">{{ error }}</small>
   </div>

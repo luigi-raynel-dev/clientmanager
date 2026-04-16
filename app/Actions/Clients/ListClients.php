@@ -9,8 +9,8 @@ class ListClients
 {
   public function __construct(private ClientRepository $repository) {}
 
-  public function execute(ClientFilter $filter)
+  public function execute(?ClientFilter $filter = null)
   {
-    return $this->repository->search($filter);
+    return $filter ? $this->repository->search($filter) : $this->repository->list();
   }
 }

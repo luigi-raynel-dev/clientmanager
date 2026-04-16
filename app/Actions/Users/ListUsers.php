@@ -9,8 +9,8 @@ class ListUsers
 {
   public function __construct(private UserRepository $repository) {}
 
-  public function execute(UserFilter $filter)
+  public function execute(?UserFilter $filter = null)
   {
-    return $this->repository->search($filter);
+    return $filter ? $this->repository->search($filter) : $this->repository->list();
   }
 }

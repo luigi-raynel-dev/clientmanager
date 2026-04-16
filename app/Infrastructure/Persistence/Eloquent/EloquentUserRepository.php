@@ -34,6 +34,12 @@ class EloquentUserRepository implements UserRepository
       ->paginate($filter->per_page ?? 10);
   }
 
+  public function list(): Collection
+  {
+    return User::all();
+  }
+
+
   public function get(int $id): User
   {
     return User::findOrFail($id);

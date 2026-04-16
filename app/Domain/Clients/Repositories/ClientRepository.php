@@ -12,6 +12,8 @@ interface ClientRepository
 {
   public function search(ClientFilter $filter): LengthAwarePaginator;
 
+  public function list(): Collection;
+
   public function get(int $id): Client;
 
   public function findByIds(array $ids): Collection;
