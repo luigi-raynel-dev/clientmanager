@@ -8,11 +8,13 @@ import { ref } from 'vue';
 import { zodResolver } from '@primevue/forms/resolvers/zod';
 import { useToast } from 'primevue';
 import ProjectForm, { ProjectFormType } from '@/components/Project/ProjectForm.vue';
+import type { User } from '@/types/auth'
 import { ProjectStatus } from '@/types/project';
 
 const props = defineProps<{
   name: string;
   statuses: ProjectStatus[]
+  professionals?: User[]
 }>()
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -33,6 +35,7 @@ const projectSchema = z.object({
   name: z.string().min(3),
   description: z.string().nullable().nullish(),
   priority: z.enum(['Low', 'Medium', 'High']).default('Medium'),
+  professional_ids: z.array(z.number()),
 })
 
 const resolver = ref(zodResolver(projectSchema))
@@ -45,6 +48,7 @@ const form = useForm({
   status_id: props.statuses.find(({ is_default }) => is_default)?.id ?? null,
   start_date: null,
   end_date: null,
+  professional_ids: [],
 } as ProjectFormType)
 
 const submit = () => {
@@ -82,8 +86,8 @@ const submit = () => {
 
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="w-full flex h-full flex-1 flex-col p-4 my-6">
-      <ProjectForm :form="form" :statuses="statuses" :resolver="resolver" submit-label="Create Service" @submit="submit"
-        @cancel="$inertia.visit(index().url)" />
+      <ProjectForm :form="form" :statuses="statuses" :professionals="props.professionals ?? []" :resolver="resolver"
+        submit-label="Create Service" @submit="submit" @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>

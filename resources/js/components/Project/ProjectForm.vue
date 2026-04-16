@@ -5,6 +5,8 @@ import Button from 'primevue/button'
 import { InertiaForm } from '@inertiajs/vue3'
 import { Card, Select, SelectButton, Textarea } from 'primevue';
 import OptionalField from '../ui/label/OptionalField.vue';
+import ProfessionalMultiSelect from './ProfessionalMultiSelect.vue';
+import type { User } from '@/types/auth';
 import { ProjectStatus } from '@/types/project';
 
 export type ProjectFormType = {
@@ -14,11 +16,13 @@ export type ProjectFormType = {
   status_id?: number | null;
   start_date?: string | null;
   end_date?: string | null;
+  professional_ids: number[];
 };
 
 const props = defineProps<{
   form: InertiaForm<ProjectFormType>
   statuses: ProjectStatus[]
+  professionals?: User[]
   resolver: FormProps["resolver"]
   submitLabel: string
 }>()
@@ -128,9 +132,11 @@ defineEmits(['submit', 'cancel'])
               <h2 class="text-xl font-bold mb-2">Clients</h2>
               <p class="text-gray-600 mb-4">You can assign clients to this project after creating it.</p>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col gap-4">
               <h2 class="text-xl font-bold mb-2">Professionals</h2>
-              <p class="text-gray-600 mb-4">You can assign professionals to this project after creating it.</p>
+              <p class="text-gray-600">Search and assign professionals to the project.</p>
+              <ProfessionalMultiSelect v-model="form.professional_ids" :professionals="props.professionals ?? []"
+                placeholder="Search users by name" :error="form.errors.professional_ids" />
             </div>
           </div>
         </template>
