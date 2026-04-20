@@ -12,6 +12,8 @@ interface ServiceRepository
 {
   public function search(ServiceFilter $filter): LengthAwarePaginator;
 
+  public function list(): Collection;
+
   public function get(int $id): Service;
 
   public function findByIds(array $ids): Collection;

@@ -11,12 +11,14 @@ import ProjectForm, { ProjectFormType } from '@/components/Project/ProjectForm.v
 import type { User } from '@/types/auth'
 import { ProjectStatus } from '@/types/project';
 import { Client } from '@/types/client';
+import { Service } from '@/types/service';
 
 const props = defineProps<{
   name: string;
   statuses: ProjectStatus[]
   professionals: User[]
   clients: Client[]
+  services: Service[]
 }>()
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -90,7 +92,8 @@ const submit = () => {
   <AppLayout :breadcrumbs="breadcrumbs">
     <div class="w-full flex h-full flex-1 flex-col p-4 my-6">
       <ProjectForm :form="form" :statuses="statuses" :professionals="props.professionals" :clients="props.clients"
-        :resolver="resolver" submit-label="Create Service" @submit="submit" @cancel="$inertia.visit(index().url)" />
+        :services="services" :resolver="resolver" submit-label="Create Service" @submit="submit"
+        @cancel="$inertia.visit(index().url)" />
     </div>
   </AppLayout>
 </template>

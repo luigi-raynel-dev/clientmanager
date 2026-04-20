@@ -10,6 +10,9 @@ import ProfessionalMultiSelect from './ProfessionalMultiSelect.vue';
 import type { User } from '@/types/auth';
 import { ProjectStatus } from '@/types/project';
 import { Client } from '@/types/client';
+import { Service } from '@/types/service';
+import { ref } from 'vue';
+import AddServices from '../Service/AddServices.vue';
 
 export type ProjectFormType = {
   name: string;
@@ -27,9 +30,12 @@ const props = defineProps<{
   statuses: ProjectStatus[]
   professionals: User[]
   clients: Client[]
+  services: Service[]
   resolver: FormProps["resolver"]
   submitLabel: string
 }>()
+
+const openNewService = ref(false)
 
 defineEmits(['submit', 'cancel'])
 
@@ -60,8 +66,10 @@ defineEmits(['submit', 'cancel'])
           <template #title>Services</template>
           <template #content>
             <div class="flex gap-4 flex-col lg:flex-row lg:gap-2 w-full">
-              <Button icon="pi pi-plus" iconPos="right" label="Add Service" class="p-button-sm" severity="info" />
+              <Button icon="pi pi-plus" iconPos="right" label="Add Service" class="p-button-sm" severity="info"
+                @click="openNewService = true" />
             </div>
+            <AddServices :visible="openNewService" :services="services" />
           </template>
         </Card>
 

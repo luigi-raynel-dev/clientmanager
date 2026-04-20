@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Clients\ListClients;
 use App\Actions\Projects\CreateProject;
 use App\Actions\Projects\ListProjects;
+use App\Actions\Services\ListServices;
 use App\Actions\Users\ListUsers;
 use App\DTO\Project\ProjectData;
 use App\DTO\Project\ProjectFilter;
@@ -35,13 +36,14 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function create(ListUsers $listUsers, ListClients $listClients)
+    public function create(ListUsers $listUsers, ListClients $listClients, ListServices $listServices)
     {
         return Inertia::render('Projects/Create', [
             'name' => "Project #" . (Project::count() + 1),
             'statuses' => ProjectStatus::orderBy('order')->get(),
             'clients' => $listClients->execute(),
             'professionals' => $listUsers->execute(),
+            'services' => $listServices->execute()
         ]);
     }
 

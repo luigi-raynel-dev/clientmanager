@@ -28,6 +28,13 @@ class EloquentServiceRepository implements ServiceRepository
       ->paginate($filter->per_page ?? 10);
   }
 
+  public function list(): Collection
+  {
+    return Service::where('is_active', 1)
+      ->with('pricingType')
+      ->get();
+  }
+
   public function get(int $id): Service
   {
     return Service::with('pricingType')->findOrFail($id);

@@ -9,8 +9,8 @@ class ListServices
 {
   public function __construct(private ServiceRepository $repository) {}
 
-  public function execute(ServiceFilter $filter)
+  public function execute(?ServiceFilter $filter = null)
   {
-    return $this->repository->search($filter);
+    return $filter ? $this->repository->search($filter) : $this->repository->list();
   }
 }
