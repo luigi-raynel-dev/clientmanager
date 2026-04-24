@@ -54,6 +54,7 @@ const form = useForm({
   end_date: null,
   professional_ids: [],
   client_ids: [],
+  services: []
 } as ProjectFormType)
 
 const submit = () => {

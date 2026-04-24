@@ -13,6 +13,7 @@ import { Client } from '@/types/client';
 import { Service } from '@/types/service';
 import { ref } from 'vue';
 import AddServices from '../Service/AddServices.vue';
+import ServiceCard from '../Service/ServiceCard.vue';
 
 export type ProjectFormType = {
   name: string;
@@ -23,6 +24,7 @@ export type ProjectFormType = {
   end_date?: string | null;
   professional_ids: number[];
   client_ids: number[];
+  services: Service[]
 };
 
 const props = defineProps<{
@@ -65,11 +67,15 @@ defineEmits(['submit', 'cancel'])
         <Card>
           <template #title>Services</template>
           <template #content>
-            <div class="flex gap-4 flex-col lg:flex-row lg:gap-2 w-full">
+            <div class="flex flex-col gap-6 w-full">
+              <ServiceCard v-for="(service, index) in form.services" :key="index" :service="service" v-on:remove="() => {
+                form.services = form.services.filter(({ id }) => id !== service.id)
+              }" />
               <Button icon="pi pi-plus" iconPos="right" label="Add Service" class="p-button-sm" severity="info"
                 @click="openNewService = true" />
             </div>
-            <AddServices :visible="openNewService" :services="services" />
+            <AddServices v-model:visible="openNewService" :services="services"
+              v-model:selected-services="form.services" />
           </template>
         </Card>
 
