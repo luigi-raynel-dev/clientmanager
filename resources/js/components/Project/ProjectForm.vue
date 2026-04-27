@@ -11,7 +11,7 @@ import type { User } from '@/types/auth';
 import { ProjectStatus } from '@/types/project';
 import { Client } from '@/types/client';
 import { Service } from '@/types/service';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import AddServices from '../Service/AddServices.vue';
 import ServiceCard from '../Service/ServiceCard.vue';
 
@@ -38,6 +38,12 @@ const props = defineProps<{
 }>()
 
 const openNewService = ref(false)
+
+const price = computed(() => {
+  return props.form.services.reduce((total, service) => {
+    return total + Number(service.base_price ?? 0)
+  }, 0)
+})
 
 defineEmits(['submit', 'cancel'])
 
@@ -88,7 +94,7 @@ defineEmits(['submit', 'cancel'])
       </div>
     </div>
 
-    <div class="w-full md:w-1/3 md:self-start">
+    <div class="w-full md:w-1/3 md:self-start flex flex-col gap-4">
       <Card>
         <template #content>
           <div class="flex flex-col gap-4">
@@ -157,6 +163,18 @@ defineEmits(['submit', 'cancel'])
               <ProfessionalMultiSelect v-model="form.professional_ids" :professionals="props.professionals"
                 :error="form.errors.professional_ids" />
             </div>
+          </div>
+        </template>
+      </Card>
+
+      <Card>
+        <template #content>
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-col">
+              <h2 class="text-xl font-bold mb-2">Pricing</h2>
+              $ {{ price }}
+            </div>
+
           </div>
         </template>
       </Card>
