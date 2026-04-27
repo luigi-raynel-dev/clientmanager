@@ -3,7 +3,7 @@ import { Form, FormProps } from '@primevue/forms'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import { InertiaForm } from '@inertiajs/vue3'
-import { Card, Select, SelectButton, Textarea } from 'primevue';
+import { Badge, Card, Select, SelectButton, Textarea } from 'primevue';
 import OptionalField from '../ui/label/OptionalField.vue';
 import ClientMultiSelect from '../Client/ClientMultiSelect.vue';
 import ProfessionalMultiSelect from './ProfessionalMultiSelect.vue';
@@ -65,13 +65,19 @@ defineEmits(['submit', 'cancel'])
         </div>
 
         <Card>
-          <template #title>Services</template>
+          <template #title>
+            Services <Badge severity="secondary">{{ form.services.length }}</Badge>
+          </template>
           <template #content>
             <div class="flex flex-col gap-6 w-full">
-              <ServiceCard v-for="(service, index) in form.services" :key="index" :service="service" v-on:remove="() => {
-                form.services = form.services.filter(({ id }) => id !== service.id)
-              }" />
-              <Button icon="pi pi-plus" iconPos="right" label="Add Service" class="p-button-sm" severity="info"
+              <div v-for="(service, index) in form.services" class="w-full flex gap-2 items-center">
+                <ServiceCard :key="index" :service="service" />
+                <Button type="button" severity="danger" variant="outlined" icon="pi pi-trash" text size="small" @click="() => {
+                  form.services = form.services.filter(({ id }) => id !== service.id)
+                }" />
+              </div>
+
+              <Button icon="pi pi-plus" iconPos="right" label="Add Service" class="p-button-sm w-max" severity="info"
                 @click="openNewService = true" />
             </div>
             <AddServices v-model:visible="openNewService" :services="services"

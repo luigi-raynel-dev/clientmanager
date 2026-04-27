@@ -43,8 +43,7 @@ const props = defineProps<{
 
     <template #footer v-if="showAction || onRemove">
       <div class="flex items-center justify-end w-full" v-if="onRemove">
-        <Button type="button" severity="danger" variant="outlined" icon="pi pi-trash" text size="small"
-          @click="onRemove" />
+
       </div>
       <div class="flex items-center justify-between" v-if="showAction">
         <ToggleStatus variant="switch" :status="Boolean(service.is_active)" :url="status(service.id).url"
